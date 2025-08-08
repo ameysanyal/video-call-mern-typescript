@@ -1,7 +1,6 @@
 //This code defines a utility function to generate JWT access tokens in a secure and configurable way
-
 import jwt, { JwtPayload, SignOptions } from "jsonwebtoken";
-import { Env } from "../config/env.config.js";
+import { Env } from "@/config/env.config.js";
 import { Types } from "mongoose";
 
 // JwtPayload: TypeScript type for decoded JWT payloads.
@@ -45,29 +44,28 @@ export const signJwtToken = (
   payload: AccessTokenPayload,
   options?: SignOptsAndSecret
 ) => {
-
   //Checks if you're using default access token settings.
-// If no options are passed, or passed value is the default access settings, it's considered an access token.
+  // If no options are passed, or passed value is the default access settings, it's considered an access token.
   const isAccessToken = !options || options === accessTokenSignOptions;
 
   //Destructures the secret and the rest of the signing options.
-//Uses provided options, or falls back to accessTokenSignOptions.
+  //Uses provided options, or falls back to accessTokenSignOptions.
   const { secret, ...opts } = options || accessTokenSignOptions;
 
-//Generates a signed JWT using:
-//payload (e.g., { userId: "123" })
-//secret (used to encrypt/sign)
-//combined options from defaults + user-provided or default opts
+  //Generates a signed JWT using:
+  //payload (e.g., { userId: "123" })
+  //secret (used to encrypt/sign)
+  //combined options from defaults + user-provided or default opts
   const token = jwt.sign(payload, secret, {
     ...defaults,
     ...opts,
   });
 
-//Decodes the token to get exp (expiry timestamp in seconds).
-//Multiplies by 1000 to convert to milliseconds (JavaScript Date format).
-//Only computed if this is an access token.
+  //Decodes the token to get exp (expiry timestamp in seconds).
+  //Multiplies by 1000 to convert to milliseconds (JavaScript Date format).
+  //Only computed if this is an access token.
 
-const expiresAt = isAccessToken
+  const expiresAt = isAccessToken
     ? (jwt.decode(token) as JwtPayload)?.exp! * 1000
     : undefined;
 

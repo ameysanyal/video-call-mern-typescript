@@ -1,5 +1,5 @@
-import { ApiResponseData } from "../@types/api.types.js";
-import { HTTPSTATUS } from "../config/http.config.js";
+import { ApiResponseData } from "@/types/api.types.js";
+import { HTTPSTATUS } from "@/config/http.config.js";
 import { Response } from "express";
 
 // A reusable class to shape JSON responses consistently.

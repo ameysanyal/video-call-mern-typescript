@@ -1,5 +1,5 @@
 import { StreamChat, UserResponse } from "stream-chat";
-import { Env } from "../config/env.config.js";
+import { Env } from "@/config/env.config.js";
 
 // This imports the StreamChat class from the Stream Chat SDK.
 // StreamChat provides methods to interact with the Stream Chat API
@@ -20,7 +20,7 @@ const streamClient = StreamChat.getInstance(apiKey, apiSecret);
 // upsertStreamUser is used to create or update one or more users in Stream.
 // It accepts an array of users (here, just one user).
 
-//When you see Partial<UserResponse> in TypeScript, 
+//When you see Partial<UserResponse> in TypeScript,
 // it means that the userData object is expected to be an object where all properties of UserResponse are optional.
 // partial is used because upsert means update or insert
 export const upsertStreamUser = async (
@@ -48,6 +48,5 @@ export const generateStreamToken = (userId: string) => {
   }
 };
 
-
-//Note:- Partial<Type> (Utility Type): Partial is a built-in TypeScript utility type. 
+//Note:- Partial<Type> (Utility Type): Partial is a built-in TypeScript utility type.
 //It takes another type Type as an argument and constructs a new type where all properties of Type are made optional.

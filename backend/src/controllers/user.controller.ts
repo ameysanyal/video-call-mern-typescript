@@ -1,15 +1,15 @@
-import userService from "../services/user.service.js";
-import friendRequestService from "../services/friend-request.service.js";
+import userService from "@/services/user.service.js";
+import friendRequestService from "@/services/friend-request.service.js";
 import { Request, Response, NextFunction } from "express";
-import { ApiResponse, sendApiResponse } from "../utils/api-response.js";
+import { ApiResponse, sendApiResponse } from "@/utils/api-response.js";
 import {
   BadRequestException,
   UnauthorizedException,
   NotFoundException,
   HttpException,
-} from "../utils/app-error.js";
-import { asyncHandler } from "../middlewares/asynchandler.middleware.js";
-import { HTTPSTATUS } from "../config/http.config.js";
+} from "@/utils/app-error.js";
+import { asyncHandler } from "@/middlewares/asynchandler.middleware.js";
+import { HTTPSTATUS } from "@/config/http.config.js";
 import { Types } from "mongoose";
 
 const userController = {
@@ -22,6 +22,8 @@ const userController = {
       }
       const currentUserId = req.user.id;
       const currentUser = req.user;
+
+      process.stdout.write(`in user test\n`);
 
       const friendIds: Types.ObjectId[] = currentUser.friends.map((friend) =>
         friend instanceof Types.ObjectId ? friend : friend._id

@@ -1,5 +1,5 @@
 import mongoose, { Document, Types } from "mongoose";
-import { UserDocument } from "./user.model.js";
+import { UserDocument } from "@/models/user.model.js";
 
 export interface FriendRequestDocument extends Document {
   sender: UserDocument | Types.ObjectId;
@@ -21,7 +21,7 @@ const friendRequestSchema = new mongoose.Schema<FriendRequestDocument>(
     },
     status: {
       type: String,
-      enum: ["pending", "accepted","rejected"],
+      enum: ["pending", "accepted", "rejected"],
       default: "pending",
     },
   },

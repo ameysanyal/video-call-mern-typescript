@@ -1,9 +1,9 @@
 import { Response } from "express";
 import { z, ZodError } from "zod";
 import { ErrorRequestHandler } from "express";
-import { HTTPSTATUS } from "../config/http.config.js";
-import { AppError } from "../utils/app-error.js";
-import { ErrorCodeEnum } from "../enums/error-code.enum.js";
+import { HTTPSTATUS } from "@/config/http.config.js";
+import { AppError } from "@/utils/app-error.js";
+import { ErrorCodeEnum } from "@/enums/error-code.enum.js";
 
 const formatZodError = (res: Response, error: z.ZodError) => {
   const errors = error?.issues?.map((err) => ({
@@ -28,7 +28,6 @@ export const errorHandler: ErrorRequestHandler = (
   if (error instanceof ZodError) {
     return formatZodError(res, error);
   }
-
 
   if (error instanceof AppError) {
     return res.status(error.statusCode).json({

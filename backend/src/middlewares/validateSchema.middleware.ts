@@ -15,6 +15,7 @@ export const validate =
         const parsedBody = schemas.body.parse(req.body);
         req.body = parsedBody;
       }
+
       if (schemas.params) {
         const parsedParams = schemas.params.parse(req.params);
         req.params =

@@ -52,7 +52,6 @@ export type HttpStatusCodeType = (typeof HTTPSTATUS)[keyof typeof HTTPSTATUS];
 // // becomes:
 // 200 | 201 | 404 | 500
 
-
 // Note = why function is used instead of directly exporting an object?
 // Why use a function here?
 // Reason	Benefit
@@ -61,7 +60,3 @@ export type HttpStatusCodeType = (typeof HTTPSTATUS)[keyof typeof HTTPSTATUS];
 // 🔁 Future extensibility	Easier to add logic later — e.g., load codes based on environment, language, or config.
 // 🔒 Immutability enforcement	You could freeze the object inside the function to make it read-only.
 // 🧪 Testability	Functions are easier to mock/override in unit tests than constants.
-
-
-
-

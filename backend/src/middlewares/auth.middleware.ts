@@ -1,18 +1,16 @@
 import jwt, { JwtPayload } from "jsonwebtoken";
-import User from "../models/user.model.js";
-import { Env } from "../config/env.config.js";
+import User from "@/models/user.model.js";
+import { Env } from "@/config/env.config.js";
 import { Request, Response, NextFunction } from "express";
-import { UserDocument } from "../models/user.model.js";
+import { UserDocument } from "@/models/user.model.js";
+import mongoose from "mongoose";
+import { DecodedToken } from "@/types/jwt.types.js";
 
 // Extend Express Request interface to include user
 declare module "express-serve-static-core" {
   interface Request {
     user?: UserDocument;
   }
-}
-
-interface DecodedToken extends JwtPayload {
-  userId: string;
 }
 
 export const protectRoute = async (
@@ -22,7 +20,6 @@ export const protectRoute = async (
 ) => {
   try {
     const token = req.cookies.jwt;
-
     if (!token) {
       return res
         .status(401)
@@ -35,6 +32,11 @@ export const protectRoute = async (
       return res.status(401).json({ message: "Unauthorized - Invalid token" });
     }
 
+    if (!mongoose.isValidObjectId(decoded.userId)) {
+      return res
+        .status(401)
+        .json({ message: "Unauthorized - Invalid user ID" });
+    }
     //This tells Mongoose to exclude the password field from the returned user document.
     // The "-" (minus) sign indicates exclusion.
     const user = await User.findById(decoded.userId).select("-password");

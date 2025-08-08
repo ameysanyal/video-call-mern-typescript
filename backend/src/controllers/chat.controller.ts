@@ -1,9 +1,9 @@
-import { generateStreamToken } from "../lib/streamChat.js";
+import { generateStreamToken } from "@/lib/streamChat.js";
 import { Request, Response, NextFunction } from "express";
-import { ApiResponse, sendApiResponse } from "../utils/api-response.js";
-import { UnauthorizedException } from "../utils/app-error.js";
-import { asyncHandler } from "../middlewares/asynchandler.middleware.js";
-import { HTTPSTATUS } from "../config/http.config.js";
+import { ApiResponse, sendApiResponse } from "@/utils/api-response.js";
+import { UnauthorizedException } from "@/utils/app-error.js";
+import { asyncHandler } from "@/middlewares/asynchandler.middleware.js";
+import { HTTPSTATUS } from "@/config/http.config.js";
 
 const chatController = {
   getStreamToken: asyncHandler(
@@ -13,6 +13,7 @@ const chatController = {
           "Unauthorized: user not found in request"
         );
       }
+      console.log(req.user.id);
       const token = generateStreamToken(req.user.id);
       return sendApiResponse(
         res,

@@ -1,5 +1,5 @@
-import { HTTPSTATUS, HttpStatusCodeType } from "../config/http.config.js";
-import { ErrorCodeEnum, ErrorCodeEnumType } from "../enums/error-code.enum.js";
+import { HTTPSTATUS, HttpStatusCodeType } from "@/config/http.config.js";
+import { ErrorCodeEnum, ErrorCodeEnumType } from "@/enums/error-code.enum.js";
 
 // HTTPSTATUS: An object with standard HTTP status codes (like 200, 400, 404, 500).
 
@@ -8,7 +8,6 @@ import { ErrorCodeEnum, ErrorCodeEnumType } from "../enums/error-code.enum.js";
 // ErrorCodeEnum: A list of custom error codes.
 
 // ErrorCodeEnumType: A type that only allows keys of ErrorCodeEnum.
-
 
 //This creates a custom base error class named AppError, extending the built-in Error class in JavaScript.
 export class AppError extends Error {
@@ -88,7 +87,6 @@ export class InternalServerException extends AppError {
     );
   }
 }
-
 
 // Situation	Recommendation
 // New, modern project	✅ Prefer throw new CustomException(...)

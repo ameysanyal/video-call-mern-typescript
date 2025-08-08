@@ -1,18 +1,18 @@
-import { upsertStreamUser } from "../lib/streamChat.js";
+import { upsertStreamUser } from "@/lib/streamChat.js";
 import { Request, Response, NextFunction } from "express";
-import { ApiResponse, sendApiResponse } from "../utils/api-response.js";
+import { ApiResponse, sendApiResponse } from "@/utils/api-response.js";
 import {
   BadRequestException,
   UnauthorizedException,
   NotFoundException,
-} from "../utils/app-error.js";
-import { asyncHandler } from "../middlewares/asynchandler.middleware.js";
-import { ErrorCodeEnum } from "../enums/error-code.enum.js";
-import { Env } from "../config/env.config.js";
-import { HTTPSTATUS } from "../config/http.config.js";
-import { UserDocument } from "../models/user.model.js";
-import { signJwtToken } from "../lib/jwt.js";
-import userService from "../services/user.service.js";
+} from "@/utils/app-error.js";
+import { asyncHandler } from "@/middlewares/asynchandler.middleware.js";
+import { ErrorCodeEnum } from "@/enums/error-code.enum.js";
+import { Env } from "@/config/env.config.js";
+import { HTTPSTATUS } from "@/config/http.config.js";
+import { UserDocument } from "@/models/user.model.js";
+import { signJwtToken } from "@/lib/jwt.js";
+import userService from "@/services/user.service.js";
 
 const authController = {
   signup: asyncHandler(
@@ -117,11 +117,16 @@ const authController = {
       const { token } = signJwtToken({ userId: user._id });
 
       res.cookie("jwt", token, {
-        maxAge: 7 * 24 * 60 * 60 * 1000,
+        maxAge: 7 * 24 * 60 * 60 * 1000, //Sets the cookie to expire after 7 days.
         httpOnly: true, // prevent XSS attacks,
         sameSite: "strict", // prevent CSRF attacks
         secure: process.env.NODE_ENV === "production",
       });
+
+      // This attaches the token to the browser as a cookie named jwt.
+      // Since it’s httpOnly, frontend JavaScript cannot read or modify it, which increases security.
+      // sameSite: "strict" blocks the cookie from being sent in cross-site requests (CSRF protection).
+      // secure: true ensures it's sent only over HTTPS in production.
 
       return sendApiResponse(
         res,
@@ -129,6 +134,7 @@ const authController = {
           success: true,
           data: user,
           statusCode: HTTPSTATUS.OK,
+          meta: token,
         })
       );
     }

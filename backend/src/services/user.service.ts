@@ -1,32 +1,53 @@
-import User, { UserDocument } from '../models/user.model.js';
-import { Logger, winstonLogger } from '../config/logger.js'; // Example dependency for DI
+import User, { UserDocument } from "@/models/user.model.js";
+import { Logger, winstonLogger } from "@/config/logger.js"; // Example dependency for DI
 import { Types } from "mongoose";
 
 // Define an interface for the service for better type checking and DI
 export interface IUserService {
-  getRecommendedUsers(currentUserId: string | Types.ObjectId, currentUserFriends: Types.ObjectId[]): Promise<UserDocument[]>;
-  getUserFriends(userId: string | Types.ObjectId): Promise<UserDocument[] | null>;
+  getRecommendedUsers(
+    currentUserId: string | Types.ObjectId,
+    currentUserFriends: Types.ObjectId[]
+  ): Promise<UserDocument[]>;
+  getUserFriends(
+    userId: string | Types.ObjectId
+  ): Promise<UserDocument[] | null>;
   findUserById(userId: string | Types.ObjectId): Promise<UserDocument | null>;
-  addFriendToUser(userId: string | Types.ObjectId, friendId: string): Promise<UserDocument | null>;
+  addFriendToUser(
+    userId: string | Types.ObjectId,
+    friendId: string
+  ): Promise<UserDocument | null>;
   findUserByEmail(email: string): Promise<UserDocument | null>;
-  createUser(userData: { email: string; fullName: string; password?: string; profilePic: string; isOnboarded?: boolean }): Promise<UserDocument>;
-  updateUserById(userId: string | Types.ObjectId, updates: any): Promise<UserDocument | null>;
+  createUser(userData: {
+    email: string;
+    fullName: string;
+    password?: string;
+    profilePic: string;
+    isOnboarded?: boolean;
+  }): Promise<UserDocument>;
+  updateUserById(
+    userId: string | Types.ObjectId,
+    updates: any
+  ): Promise<UserDocument | null>;
 }
 
 export class UserService implements IUserService {
   private userModel: typeof User; // Correct type for Mongoose model
   private logger: Logger;
 
-  constructor(userModel: typeof User, logger: Logger) { // Dependencies injected
+  constructor(userModel: typeof User, logger: Logger) {
+    // Dependencies injected
     this.userModel = userModel;
     this.logger = logger;
   }
 
-   /**
+  /**
    * Fetches recommended users for a given user.
    * Excludes the current user and their existing friends.
    */
-  async getRecommendedUsers(currentUserId: string | Types.ObjectId, currentUserFriends: Types.ObjectId[]): Promise<UserDocument[]> {
+  async getRecommendedUsers(
+    currentUserId: string | Types.ObjectId,
+    currentUserFriends: Types.ObjectId[]
+  ): Promise<UserDocument[]> {
     this.logger.debug(`Fetching recommended users for ${currentUserId}`);
     try {
       const recommendedUsers = await this.userModel.find({
@@ -39,7 +60,10 @@ export class UserService implements IUserService {
       this.logger.debug(`Found ${recommendedUsers.length} recommended users.`);
       return recommendedUsers;
     } catch (error) {
-      this.logger.error(`Error fetching recommended users for ${currentUserId}:`, error);
+      this.logger.error(
+        `Error fetching recommended users for ${currentUserId}:`,
+        error
+      );
       throw error; // Re-throw to be caught by asyncHandler
     }
   }
@@ -47,15 +71,18 @@ export class UserService implements IUserService {
   /**
    * Fetches the friends of a specific user.
    */
-  async getUserFriends(userId: string | Types.ObjectId): Promise<UserDocument[] | null> {
+  async getUserFriends(
+    userId: string | Types.ObjectId
+  ): Promise<UserDocument[] | null> {
     this.logger.debug(`Fetching friends for user ${userId}`);
     try {
-      const user = await this.userModel.findById(userId)
+      const user = (await this.userModel
+        .findById(userId)
         .select("friends")
         .populate(
           "friends",
           "fullName profilePic nativeLanguage learningLanguage"
-        ) as (UserDocument & { friends: UserDocument[] }) | null; // Cast for populated friends
+        )) as (UserDocument & { friends: UserDocument[] }) | null; // Cast for populated friends
 
       return user ? user.friends : null;
     } catch (error) {
@@ -67,7 +94,9 @@ export class UserService implements IUserService {
   /**
    * Finds a user by their ID.
    */
-  async findUserById(userId: string | Types.ObjectId): Promise<UserDocument | null> {
+  async findUserById(
+    userId: string | Types.ObjectId
+  ): Promise<UserDocument | null> {
     this.logger.debug(`Finding user by ID: ${userId}`);
     try {
       return await this.userModel.findById(userId);
@@ -80,7 +109,10 @@ export class UserService implements IUserService {
   /**
    * Adds a friend ID to a user's friends array.
    */
-  async addFriendToUser(userId: string | Types.ObjectId, friendId: string): Promise<UserDocument | null> {
+  async addFriendToUser(
+    userId: string | Types.ObjectId,
+    friendId: string
+  ): Promise<UserDocument | null> {
     this.logger.debug(`Adding friend ${friendId} to user ${userId}`);
     try {
       return await this.userModel.findByIdAndUpdate(
@@ -89,7 +121,10 @@ export class UserService implements IUserService {
         { new: true } // Return the updated document
       );
     } catch (error) {
-      this.logger.error(`Error adding friend ${friendId} to user ${userId}:`, error);
+      this.logger.error(
+        `Error adding friend ${friendId} to user ${userId}:`,
+        error
+      );
       throw error;
     }
   }
@@ -104,7 +139,13 @@ export class UserService implements IUserService {
     }
   }
 
-  async createUser(userData: { email: string; fullName: string; password?: string; profilePic: string; isOnboarded?: boolean }): Promise<UserDocument> {
+  async createUser(userData: {
+    email: string;
+    fullName: string;
+    password?: string;
+    profilePic: string;
+    isOnboarded?: boolean;
+  }): Promise<UserDocument> {
     this.logger.info(`Creating new user with email: ${userData.email}`);
     try {
       // If password hashing isn't handled by a Mongoose pre-save hook,
@@ -114,12 +155,18 @@ export class UserService implements IUserService {
       this.logger.debug(`New user created with ID: ${newUser._id}`);
       return newUser;
     } catch (error) {
-      this.logger.error(`Error creating user with email ${userData.email}:`, error);
+      this.logger.error(
+        `Error creating user with email ${userData.email}:`,
+        error
+      );
       throw error;
     }
   }
 
-  async updateUserById(userId: string | Types.ObjectId, updates: any): Promise<UserDocument | null> {
+  async updateUserById(
+    userId: string | Types.ObjectId,
+    updates: any
+  ): Promise<UserDocument | null> {
     this.logger.debug(`Updating user with ID: ${userId}`);
     try {
       const updatedUser = await this.userModel.findByIdAndUpdate(
@@ -138,7 +185,6 @@ export class UserService implements IUserService {
       throw error;
     }
   }
-
 }
 
 // Option A: Export an instance (simple approach for smaller apps)
