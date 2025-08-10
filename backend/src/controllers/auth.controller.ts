@@ -26,6 +26,13 @@ const authController = {
         );
       }
 
+      if (!email.endsWith("@streamify.com")) {
+        throw new BadRequestException(
+          "Email must end with @streamify.com",
+          ErrorCodeEnum.VALIDATION_ERROR
+        );
+      }
+
       if (password.length < 6) {
         throw new BadRequestException(
           "Password must be at least 6 characters",

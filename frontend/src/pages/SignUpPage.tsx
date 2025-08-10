@@ -1,20 +1,21 @@
-import React, { useState, type ChangeEvent, type FormEvent } from "react"; // Explicitly import React and event types
-import { ShipWheelIcon } from "lucide-react";
-import { Link } from "react-router-dom"; // Use react-router-dom for web apps
+import React, { useState, type ChangeEvent, type FormEvent } from 'react'; // Explicitly import React and event types
+import { ShipWheelIcon } from 'lucide-react';
+import { Link } from 'react-router';
 
-import useSignUp from "../hooks/useSignUp"; // Ensure this path is correct relative to the file
-import { type UserSignupData } from "@/lib/api"; // Import the UserSignupData interface
-import { AxiosError } from "axios"; // Import AxiosError for consistent error typing
+import useSignUp from '../hooks/useSignUp'; // Ensure this path is correct relative to the file
+import { type UserSignupData } from '@/lib/api'; // Import the UserSignupData interface
+import { AxiosError } from 'axios'; // Import AxiosError for consistent error typing
+import toast from 'react-hot-toast';
 
 const SignUpPage = (): React.JSX.Element => {
   // 1. Type the signupData state
   const [signupData, setSignupData] = useState<UserSignupData>({
-    fullName: "",
-    email: "",
-    password: "",
+    fullName: '',
+    email: '',
+    password: '',
   });
 
- // This is how we did it at first, without using our custom hook
+  // This is how we did it at first, without using our custom hook
   // const queryClient = useQueryClient();
   // const {
   //   mutate: signupMutation,
@@ -25,7 +26,6 @@ const SignUpPage = (): React.JSX.Element => {
   //   onSuccess: () => queryClient.invalidateQueries({ queryKey: ["authUser"] }),
   // });
 
-
   // 2. useSignUp hook provides typed values (assuming it's typed internally)
   // The 'error' returned by useSignUp will be AxiosError | null
   const { isPending, error, signupMutation } = useSignUp();
@@ -33,6 +33,10 @@ const SignUpPage = (): React.JSX.Element => {
   // 3. Type the event parameter for handleSignup and onChange
   const handleSignup = (e: FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
+    if (!signupData.email.toLowerCase().endsWith('@streamify.com')) {
+      toast.error('Email must end with @streamify.com');
+      return;
+    }
     signupMutation(signupData);
   };
 
@@ -64,7 +68,10 @@ const SignUpPage = (): React.JSX.Element => {
           {/* Ensure error is treated as AxiosError to safely access .response.data.message */}
           {error && (
             <div role="alert" className="alert alert-error mb-4">
-              <span>{(error as AxiosError<{ message: string }>).response?.data?.message || error.message}</span>
+              <span>
+                {(error as AxiosError<{ message: string }>).response?.data?.message ||
+                  error.message}
+              </span>
             </div>
           )}
 
@@ -101,13 +108,14 @@ const SignUpPage = (): React.JSX.Element => {
                     </label>
                     <input
                       type="email"
-                      placeholder="john@gmail.com"
+                      placeholder="john@streamify.com"
                       className="input input-bordered w-full"
                       name="email" // Add name attribute
                       value={signupData.email}
                       onChange={handleInputChange}
                       required
                     />
+                    <p className="text-xs opacity-70 mt-1">Email must end with @streamify.com</p>
                   </div>
                   {/* PASSWORD */}
                   <div className="form-control w-full">
@@ -132,8 +140,8 @@ const SignUpPage = (): React.JSX.Element => {
                     <label className="label cursor-pointer justify-start gap-2">
                       <input type="checkbox" className="checkbox checkbox-sm" required />
                       <span className="text-xs leading-tight">
-                        I agree to the{" "}
-                        <span className="text-primary hover:underline">terms of service</span> and{" "}
+                        I agree to the{' '}
+                        <span className="text-primary hover:underline">terms of service</span> and{' '}
                         <span className="text-primary hover:underline">privacy policy</span>
                       </span>
                     </label>
@@ -147,13 +155,13 @@ const SignUpPage = (): React.JSX.Element => {
                       Loading...
                     </>
                   ) : (
-                    "Create Account"
+                    'Create Account'
                   )}
                 </button>
 
                 <div className="text-center mt-4">
                   <p className="text-sm">
-                    Already have an account?{" "}
+                    Already have an account?{' '}
                     <Link to="/login" className="text-primary hover:underline">
                       Sign in
                     </Link>

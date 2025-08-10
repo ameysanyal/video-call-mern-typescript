@@ -1,20 +1,20 @@
-import React, { useEffect, useState } from "react"; // Explicitly import React
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import React, { useEffect, useState } from 'react'; // Explicitly import React
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
   getOutgoingFriendReqs,
   getRecommendedUsers,
   getUserFriends,
   sendFriendRequest,
-  type UserFriend,     
-  type FriendRequest, 
-} from "@/lib/api"; 
-import { Link } from "react-router-dom"; 
-import { CheckCircleIcon, MapPinIcon, UserPlusIcon, UsersIcon } from "lucide-react";
-import {AxiosError} from 'axios'
-import { capitialize } from "@/lib/utils"; // Adjust path (../lib/utils -> @/lib/utils)
-import FriendCard, { getLanguageFlag } from "@/components/FriendCard"; // Adjust path, FriendCard needs props typed
-import NoFriendsFound from "@/components/NoFriendsFound"; // Adjust path
-
+  type UserFriend,
+  type FriendRequest,
+} from '@/lib/api';
+import { Link } from 'react-router';
+import { CheckCircleIcon, MapPinIcon, UserPlusIcon, UsersIcon } from 'lucide-react';
+import { AxiosError } from 'axios';
+import { capitialize } from '@/lib/utils'; // Adjust path (../lib/utils -> @/lib/utils)
+import FriendCard, { getLanguageFlag } from '@/components/FriendCard'; // Adjust path, FriendCard needs props typed
+import NoFriendsFound from '@/components/NoFriendsFound'; // Adjust path
+import { useThemeStore } from '@/store/useThemeStore.js';
 // Assuming FriendCard.tsx defines these types or it's implicitly typed via usage
 // Example of how FriendCard's props might be typed:
 // interface FriendCardProps {
@@ -26,26 +26,30 @@ import NoFriendsFound from "@/components/NoFriendsFound"; // Adjust path
 // lib/utils.ts: export const capitialize = (str: string): string => { ... };
 // components/FriendCard.ts/tsx: export const getLanguageFlag = (language: string): string => { ... };
 
-const HomePage = (): React.JSX.Element => { // Explicitly type functional component return
+const HomePage = (): React.JSX.Element => {
+  // Explicitly type functional component return
   const queryClient = useQueryClient();
   // State for tracking outgoing requests; use Set<string> for user IDs
   const [outgoingRequestsIds, setOutgoingRequestsIds] = useState<Set<string>>(new Set());
-
+  const { theme } = useThemeStore();
   // useQuery for user friends
   const { data: friends = [], isLoading: loadingFriends } = useQuery<UserFriend[], AxiosError>({
-    queryKey: ["friends"],
+    queryKey: ['friends'],
     queryFn: getUserFriends,
   });
 
   // useQuery for recommended users
-  const { data: recommendedUsers = [], isLoading: loadingUsers } = useQuery<UserFriend[], AxiosError>({
-    queryKey: ["users"],
+  const { data: recommendedUsers = [], isLoading: loadingUsers } = useQuery<
+    UserFriend[],
+    AxiosError
+  >({
+    queryKey: ['users'],
     queryFn: getRecommendedUsers,
   });
 
   // useQuery for outgoing friend requests
   const { data: outgoingFriendReqs } = useQuery<FriendRequest[], AxiosError>({
-    queryKey: ["outgoingFriendReqs"],
+    queryKey: ['outgoingFriendReqs'],
     queryFn: getOutgoingFriendReqs,
   });
 
@@ -61,7 +65,7 @@ const HomePage = (): React.JSX.Element => { // Explicitly type functional compon
     mutationFn: sendFriendRequest, // (userId: string) => Promise<FriendRequest>
     onSuccess: () => {
       // Invalidate the outgoingFriendReqs query to refetch updated list
-      queryClient.invalidateQueries({ queryKey: ["outgoingFriendReqs"] });
+      queryClient.invalidateQueries({ queryKey: ['outgoingFriendReqs'] });
       // Optionally, you might want to invalidate 'users' to remove the sent user from recommendations
       // queryClient.invalidateQueries({ queryKey: ["users"] });
     },
@@ -72,7 +76,8 @@ const HomePage = (): React.JSX.Element => { // Explicitly type functional compon
   useEffect(() => {
     const outgoingIds = new Set<string>(); // Explicitly type the Set content
     if (outgoingFriendReqs && outgoingFriendReqs.length > 0) {
-      outgoingFriendReqs.forEach((req: FriendRequest) => { // Explicitly type 'req'
+      outgoingFriendReqs.forEach((req: FriendRequest) => {
+        // Explicitly type 'req'
         outgoingIds.add(req.recipient._id);
       });
       setOutgoingRequestsIds(outgoingIds);
@@ -83,7 +88,7 @@ const HomePage = (): React.JSX.Element => { // Explicitly type functional compon
   }, [outgoingFriendReqs]); // Depend on outgoingFriendReqs data
 
   return (
-    <div className="p-4 sm:p-6 lg:p-8">
+    <div className="p-4 sm:p-6 lg:p-8 min-h-screen" data-theme={theme}>
       <div className="container mx-auto space-y-10">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">Your Friends</h2>
@@ -101,9 +106,13 @@ const HomePage = (): React.JSX.Element => { // Explicitly type functional compon
           <NoFriendsFound />
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-            {friends.map((friend: UserFriend) => ( // Explicitly type 'friend'
-              <FriendCard key={friend._id} friend={friend} />
-            ))}
+            {friends.map(
+              (
+                friend: UserFriend // Explicitly type 'friend'
+              ) => (
+                <FriendCard key={friend._id} friend={friend} />
+              )
+            )}
           </div>
         )}
 
@@ -132,7 +141,8 @@ const HomePage = (): React.JSX.Element => { // Explicitly type functional compon
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {recommendedUsers.map((user: UserFriend) => { // Explicitly type 'user'
+              {recommendedUsers.map((user: UserFriend) => {
+                // Explicitly type 'user'
                 const hasRequestBeenSent: boolean = outgoingRequestsIds.has(user._id);
 
                 return (
@@ -162,11 +172,11 @@ const HomePage = (): React.JSX.Element => { // Explicitly type functional compon
                       <div className="flex flex-wrap gap-1.5">
                         <span className="badge badge-secondary">
                           {getLanguageFlag(user.nativeLanguage)}
-                          Native: {capitialize(user.nativeLanguage ?? "")}
+                          Native: {capitialize(user.nativeLanguage ?? '')}
                         </span>
                         <span className="badge badge-outline">
                           {getLanguageFlag(user.learningLanguage)}
-                          Learning: {capitialize(user.learningLanguage ?? "")}
+                          Learning: {capitialize(user.learningLanguage ?? '')}
                         </span>
                       </div>
 
@@ -175,7 +185,7 @@ const HomePage = (): React.JSX.Element => { // Explicitly type functional compon
                       {/* Action button */}
                       <button
                         className={`btn w-full mt-2 ${
-                          hasRequestBeenSent ? "btn-disabled" : "btn-primary"
+                          hasRequestBeenSent ? 'btn-disabled' : 'btn-primary'
                         } `}
                         onClick={() => sendRequestMutation(user._id)} // Pass userId (string)
                         disabled={hasRequestBeenSent || isPending}

@@ -6,7 +6,7 @@ import { completeOnboarding, type OnboardingData, type AuthResponse } from '@/li
 import { AxiosError } from 'axios'; // Import AxiosError for mutation error handling
 import { LoaderIcon, MapPinIcon, ShipWheelIcon, ShuffleIcon, CameraIcon } from 'lucide-react';
 import { LANGUAGES } from '@/constants'; // Assuming LANGUAGES is an array of strings
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 
 // Define the interface for your form state
 interface OnboardingFormState {
@@ -154,7 +154,7 @@ const OnboardingPage = (): React.JSX.Element => {
                 name="bio"
                 value={formState.bio}
                 onChange={handleInputChange} // Use generic handler
-                className="textarea textarea-bordered h-24"
+                className="textarea textarea-bordered h-24 w-full"
                 placeholder="Tell others about yourself and your language learning goals"
               />
             </div>

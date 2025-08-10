@@ -1,15 +1,15 @@
-import React, { useState } from "react"; // Explicitly import React
-import { ShipWheelIcon } from "lucide-react";
-import { Link } from "react-router-dom"; // Use react-router-dom for web apps
-import useLogin from "@/hooks/useLogin"; // Adjust path if necessary, this hook is already typed
-import { type UserLoginData } from "@/lib/api"; // Import UserLoginData interface
-import { AxiosError } from "axios"; // Import AxiosError for consistent error typing
+import React, { useState } from 'react'; // Explicitly import React
+import { ShipWheelIcon } from 'lucide-react';
+import { Link } from 'react-router';
+import useLogin from '@/hooks/useLogin'; // Adjust path if necessary, this hook is already typed
+import { type UserLoginData } from '@/lib/api'; // Import UserLoginData interface
+import { AxiosError } from 'axios'; // Import AxiosError for consistent error typing
 
 const LoginPage = (): React.JSX.Element => {
   // 1. Type the loginData state
   const [loginData, setLoginData] = useState<UserLoginData>({
-    email: "",
-    password: "",
+    email: '',
+    password: '',
   });
 
   // 2. useLogin hook provides typed values
@@ -50,7 +50,10 @@ const LoginPage = (): React.JSX.Element => {
           {error && (
             <div role="alert" className="alert alert-error mb-4">
               {/* Check if error has a response and data property */}
-              <span>{(error as AxiosError<{ message: string }>).response?.data?.message || error.message}</span>
+              <span>
+                {(error as AxiosError<{ message: string }>).response?.data?.message ||
+                  error.message}
+              </span>
             </div>
           )}
 
@@ -102,13 +105,13 @@ const LoginPage = (): React.JSX.Element => {
                         Signing in...
                       </>
                     ) : (
-                      "Sign In"
+                      'Sign In'
                     )}
                   </button>
 
                   <div className="text-center mt-4">
                     <p className="text-sm">
-                      Don't have an account?{" "}
+                      Don't have an account?{' '}
                       <Link to="/signup" className="text-primary hover:underline">
                         Create one
                       </Link>

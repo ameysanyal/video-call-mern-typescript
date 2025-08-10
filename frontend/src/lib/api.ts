@@ -44,7 +44,7 @@ export interface OnboardingData {
   profilePic?: string; // If user can choose/upload
   bio?: string;
   isOnboarded?: boolean; // Often set by the backend, but might be sent
-  location:string
+  location: string;
   // Add other fields relevant to onboarding
 }
 
@@ -79,17 +79,19 @@ export interface FriendRequestsResponse {
 
 // Stream token response
 export interface StreamTokenResponse {
-  token: string;
+  data: string;
 }
 
 export const signup = async (signupData: UserSignupData): Promise<AuthResponse> => {
   const response = await axiosInstance.post<AuthResponse>('/auth/signup', signupData);
+  console.log('signup response:', response.data);
   return response.data;
 };
 
 export const login = async (loginData: UserLoginData): Promise<AuthResponse> => {
-  const response = await axiosInstance.post<AuthResponse>('/auth/login', loginData);
-  return response.data;
+  const response = await axiosInstance.post<{ data: AuthResponse }>('/auth/login', loginData);
+  console.log('login response:', response.data);
+  return response.data.data;
 };
 
 export const logout = async (): Promise<void> => {
@@ -101,7 +103,8 @@ export const logout = async (): Promise<void> => {
 export const getAuthUser = async (): Promise<AuthUser | null> => {
   try {
     const res = await axiosInstance.get<AuthUser>('/auth/me');
-    return res.data;
+    console.log('getAuthUser:', res.data.user);
+    return res.data.user;
   } catch (error: unknown) {
     // Type 'error' as unknown for safety
     if (axios.isAxiosError(error)) {
@@ -123,24 +126,30 @@ export const completeOnboarding = async (userData: OnboardingData): Promise<Auth
 };
 
 export async function getUserFriends(): Promise<UserFriend[]> {
-  const response = await axiosInstance.get<UserFriend[]>('/users/friends');
-  return response.data;
+  const response = await axiosInstance.get<{ data: UserFriend[] }>('/users/friends');
+  // console.log('getUserFriends', response.data.data);
+  return response.data.data || [];
 }
 
 export async function getRecommendedUsers(): Promise<UserFriend[]> {
-  const response = await axiosInstance.get<UserFriend[]>('/users');
-  return response.data;
+  const response = await axiosInstance.get<{ data: UserFriend[] }>('/users');
+  // console.log('getRecommendedUsers', response.data.data);
+  return response.data.data || [];
 }
 
 export async function getOutgoingFriendReqs(): Promise<FriendRequest[]> {
   // Assuming this returns an array of FriendRequest objects, possibly populated with recipient user info
-  const response = await axiosInstance.get<FriendRequest[]>('/users/outgoing-friend-requests');
-  return response.data;
+  const response = await axiosInstance.get<{ data: FriendRequest[] }>(
+    '/users/outgoing-friend-requests'
+  );
+  console.log('getOutgoingFriendReqs', response.data.data);
+  return response.data.data || [];
 }
 
 export async function sendFriendRequest(userId: string): Promise<FriendRequest> {
   // Assuming this returns the newly created friend request object
   const response = await axiosInstance.post<FriendRequest>(`/users/friend-request/${userId}`);
+  console.log(response.data);
   return response.data;
 }
 
@@ -152,10 +161,11 @@ export async function getFriendRequests(): Promise<{
   outgoingReqs: FriendRequest[];
 }> {
   const response = await axiosInstance.get<{
-    incomingReqs: FriendRequest[];
-    outgoingReqs: FriendRequest[];
+    data: { incomingReqs: FriendRequest[]; outgoingReqs: FriendRequest[] };
   }>('/users/friend-requests');
-  return response.data;
+
+  console.log('getFriendRequests', response.data);
+  return response.data.data || { incomingReqs: [], outgoingReqs: [] };
 }
 
 export async function acceptFriendRequest(requestId: string): Promise<{ message: string }> {
@@ -168,5 +178,6 @@ export async function acceptFriendRequest(requestId: string): Promise<{ message:
 
 export async function getStreamToken(): Promise<StreamTokenResponse> {
   const response = await axiosInstance.get<StreamTokenResponse>('/chat/token');
+  console.log('getStreamToken', response.data);
   return response.data;
 }

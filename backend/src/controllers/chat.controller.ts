@@ -13,7 +13,7 @@ const chatController = {
           "Unauthorized: user not found in request"
         );
       }
-      console.log(req.user.id);
+
       const token = generateStreamToken(req.user.id);
       return sendApiResponse(
         res,

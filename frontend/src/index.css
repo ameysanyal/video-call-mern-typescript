@@ -1,5 +1,11 @@
-@import "tailwindcss";
-@plugin "daisyui";
+@import 'tailwindcss';
+@plugin "daisyui" {
+  themes:
+    light --default,
+    dark --prefersdark,
+    cupcake, forest, bumblebee, emerald, corporate, synthwave, retro, cyberpunk, valentine, halloween, garden,
+      aqua, lofi, pastel, fantasy, wireframe, black, luxury, dracula, cmyk, autumn, business, acid, lemonade, night, coffee, winter, dim, nord,sunset;
+}
 
 .str-chat__channel {
   display: flex;

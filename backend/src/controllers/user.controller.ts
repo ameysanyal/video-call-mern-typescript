@@ -23,8 +23,6 @@ const userController = {
       const currentUserId = req.user.id;
       const currentUser = req.user;
 
-      process.stdout.write(`in user test\n`);
-
       const friendIds: Types.ObjectId[] = currentUser.friends.map((friend) =>
         friend instanceof Types.ObjectId ? friend : friend._id
       );
