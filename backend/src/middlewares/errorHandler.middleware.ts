@@ -1,17 +1,17 @@
-import { Response } from "express";
-import { z, ZodError } from "zod";
-import { ErrorRequestHandler } from "express";
-import { HTTPSTATUS } from "@/config/http.config.js";
-import { AppError } from "@/utils/app-error.js";
-import { ErrorCodeEnum } from "@/enums/error-code.enum.js";
+import { Response } from 'express';
+import { z, ZodError } from 'zod';
+import { ErrorRequestHandler, NextFunction } from 'express';
+import { HTTPSTATUS } from '@/config/http.config.js';
+import { AppError } from '@/utils/app-error.js';
+import { ErrorCodeEnum } from '@/enums/error-code.enum.js';
 
 const formatZodError = (res: Response, error: z.ZodError) => {
   const errors = error?.issues?.map((err) => ({
-    field: err.path.join("."),
+    field: err.path.join('.'),
     message: err.message,
   }));
   return res.status(HTTPSTATUS.BAD_REQUEST).json({
-    message: "Validation failed",
+    message: 'Validation failed',
     errors: errors,
     errorCode: ErrorCodeEnum.VALIDATION_ERROR,
   });
@@ -21,9 +21,9 @@ export const errorHandler: ErrorRequestHandler = (
   error,
   req,
   res,
-  next
+  _next: NextFunction
 ): any => {
-  console.log("Error occurred on PATH:", req.path, "Error:", error);
+  console.log('Error occurred on PATH:', req.path, 'Error:', error);
 
   if (error instanceof ZodError) {
     return formatZodError(res, error);
@@ -37,7 +37,10 @@ export const errorHandler: ErrorRequestHandler = (
   }
 
   return res.status(HTTPSTATUS.INTERNAL_SERVER_ERROR).json({
-    message: "Internal Server Error",
-    error: error?.message || "Unknow error occurred",
+    message: 'Internal Server Error',
+    error: error?.message || 'Unknow error occurred',
   });
 };
+
+//we use _ before next because it is not used in the function
+//_next is unused parameter

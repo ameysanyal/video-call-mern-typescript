@@ -1,4 +1,4 @@
-import { vi } from "vitest";
+import { vi } from 'vitest';
 export const appLogger = {
   info: vi.fn(),
   error: vi.fn(),

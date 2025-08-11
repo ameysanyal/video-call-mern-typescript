@@ -1,5 +1,5 @@
-import winston from "winston";
-import { Env } from "@/config/env.config.js";
+import winston from 'winston';
+import { Env } from '@/config/env.config.js';
 
 // Define custom log levels if needed (optional)
 const levels = {
@@ -14,31 +14,29 @@ const levels = {
 
 // Define custom colors for development (optional, requires 'winston/lib/winston/config')
 const colors = {
-  error: "red",
-  warn: "yellow",
-  info: "green",
-  http: "magenta",
-  verbose: "cyan",
-  debug: "blue",
-  silly: "grey",
+  error: 'red',
+  warn: 'yellow',
+  info: 'green',
+  http: 'magenta',
+  verbose: 'cyan',
+  debug: 'blue',
+  silly: 'grey',
 };
 winston.addColors(colors); // Apply colors to Winston
 
 // Define the format for logs
 const logFormat = winston.format.combine(
-  winston.format.timestamp({ format: "YYYY-MM-DD HH:mm:ss" }),
+  winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
   // Conditionally add colorization for console in development
-  winston.format.colorize({ all: Env.NODE_ENV === "development" }),
-  winston.format.printf(
-    (info) => `${info.timestamp} ${info.level}: ${info.message}`
-  )
+  winston.format.colorize({ all: Env.NODE_ENV === 'development' }),
+  winston.format.printf((info) => `${info.timestamp} ${info.level}: ${info.message}`)
   // For production, you might want JSON format for easier parsing by log aggregators
   // winston.format.json()
 );
 
 // Configure the Winston logger instance
 const winstonLogger = winston.createLogger({
-  level: Env.NODE_ENV === "development" ? "debug" : "info", // More verbose in dev, less in prod
+  level: Env.NODE_ENV === 'development' ? 'debug' : 'info', // More verbose in dev, less in prod
   levels, // Use custom levels
   format: logFormat,
   transports: [
@@ -81,7 +79,7 @@ export class Logger {
   }
 
   debug(message: string, ...meta: any[]) {
-    if (Env.NODE_ENV === "development") {
+    if (Env.NODE_ENV === 'development') {
       // Only log debug in dev environment
       this.loggerInstance.debug(message, ...meta);
     }

@@ -1,5 +1,5 @@
-import { StreamChat, UserResponse } from "stream-chat";
-import { Env } from "@/config/env.config.js";
+import { StreamChat, UserResponse } from 'stream-chat';
+import { Env } from '@/config/env.config.js';
 
 // This imports the StreamChat class from the Stream Chat SDK.
 // StreamChat provides methods to interact with the Stream Chat API
@@ -10,7 +10,7 @@ const apiKey = Env.STREAM_API_KEY;
 const apiSecret = Env.STREAM_API_SECRET;
 
 if (!apiKey || !apiSecret) {
-  console.error("Stream API key or Secret is missing");
+  console.error('Stream API key or Secret is missing');
 }
 
 // This creates a Stream Chat client instance using the provided API key and secret.
@@ -33,7 +33,7 @@ export const upsertStreamUser = async (
     await streamClient.upsertUsers([userData as UserResponse]);
     return userData;
   } catch (error) {
-    console.error("Error upserting Stream user:", error);
+    console.error('Error upserting Stream user:', error);
   }
 };
 
@@ -44,7 +44,7 @@ export const generateStreamToken = (userId: string) => {
     const userIdStr = userId.toString();
     return streamClient.createToken(userIdStr);
   } catch (error) {
-    console.error("Error generating Stream token:", error);
+    console.error('Error generating Stream token:', error);
   }
 };
 

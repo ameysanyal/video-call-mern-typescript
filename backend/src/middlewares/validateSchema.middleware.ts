@@ -1,5 +1,5 @@
-import { Request, Response, NextFunction } from "express";
-import { ZodObject } from "zod";
+import { Request, Response, NextFunction } from 'express';
+import { ZodObject } from 'zod';
 
 interface Schemas {
   body?: ZodObject;
@@ -7,29 +7,27 @@ interface Schemas {
   query?: ZodObject;
 }
 
-export const validate =
-  (schemas: Schemas) => (req: Request, res: Response, next: NextFunction) => {
-    try {
-      // Validate and assign parsed data
-      if (schemas.body) {
-        const parsedBody = schemas.body.parse(req.body);
-        req.body = parsedBody;
-      }
-
-      if (schemas.params) {
-        const parsedParams = schemas.params.parse(req.params);
-        req.params =
-          parsedParams as import("express-serve-static-core").ParamsDictionary;
-      }
-      if (schemas.query) {
-        const parsedQuery = schemas.query.parse(req.query);
-        req.query = parsedQuery as import("qs").ParsedQs;
-      }
-      next();
-    } catch (error) {
-      next(error); // will be caught by your central errorHandler
+export const validate = (schemas: Schemas) => (req: Request, res: Response, next: NextFunction) => {
+  try {
+    // Validate and assign parsed data
+    if (schemas.body) {
+      const parsedBody = schemas.body.parse(req.body);
+      req.body = parsedBody;
     }
-  };
+
+    if (schemas.params) {
+      const parsedParams = schemas.params.parse(req.params);
+      req.params = parsedParams as import('express-serve-static-core').ParamsDictionary;
+    }
+    if (schemas.query) {
+      const parsedQuery = schemas.query.parse(req.query);
+      req.query = parsedQuery as import('qs').ParsedQs;
+    }
+    next();
+  } catch (error) {
+    next(error); // will be caught by your central errorHandler
+  }
+};
 
 // req.params = parsedParams as import("express-serve-static-core").ParamsDictionary;
 // req.query = parsedQuery as import("qs").ParsedQs;

@@ -1,6 +1,6 @@
-import { ApiResponseData } from "@/types/api.types.js";
-import { HTTPSTATUS } from "@/config/http.config.js";
-import { Response } from "express";
+import { ApiResponseData } from '@/types/api.types.js';
+import { HTTPSTATUS } from '@/config/http.config.js';
+import { Response } from 'express';
 
 // A reusable class to shape JSON responses consistently.
 class ApiResponse {
@@ -16,7 +16,7 @@ class ApiResponse {
     meta = null,
     success = true,
     statusCode = HTTPSTATUS.OK || 200,
-    message = "Execution Successful.",
+    message = 'Execution Successful.',
     language,
   }: ApiResponseData) {
     this.data = data;

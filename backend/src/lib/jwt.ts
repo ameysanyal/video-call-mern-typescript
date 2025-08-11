@@ -1,13 +1,13 @@
 //This code defines a utility function to generate JWT access tokens in a secure and configurable way
-import jwt, { JwtPayload, SignOptions } from "jsonwebtoken";
-import { Env } from "@/config/env.config.js";
-import { Types } from "mongoose";
+import jwt, { JwtPayload, SignOptions } from 'jsonwebtoken';
+import { Env } from '@/config/env.config.js';
+import { Types } from 'mongoose';
 
 // JwtPayload: TypeScript type for decoded JWT payloads.
 // SignOptions: TypeScript type for the options used when signing a token.
 
 //Restricts time units for token expiry: seconds, minutes, hours, etc.
-type TimeUnit = "s" | "m" | "h" | "d" | "w" | "y";
+type TimeUnit = 's' | 'm' | 'h' | 'd' | 'w' | 'y';
 
 //Ensures expiresIn values like 15m, 7d are valid via template literal types.
 type TimeString = `${number}${TimeUnit}`;
@@ -28,7 +28,7 @@ type SignOptsAndSecret = SignOptions & {
 
 // Default JWT options. Here, the token is intended for "user" audience.
 const defaults: SignOptions = {
-  audience: ["user"],
+  audience: ['user'],
 };
 
 //Loads default values from .env:
@@ -40,10 +40,7 @@ const accessTokenSignOptions: SignOptsAndSecret = {
 };
 
 //A reusable function to sign a JWT with provided payload and optional options.
-export const signJwtToken = (
-  payload: AccessTokenPayload,
-  options?: SignOptsAndSecret
-) => {
+export const signJwtToken = (payload: AccessTokenPayload, options?: SignOptsAndSecret) => {
   //Checks if you're using default access token settings.
   // If no options are passed, or passed value is the default access settings, it's considered an access token.
   const isAccessToken = !options || options === accessTokenSignOptions;
@@ -65,9 +62,10 @@ export const signJwtToken = (
   //Multiplies by 1000 to convert to milliseconds (JavaScript Date format).
   //Only computed if this is an access token.
 
-  const expiresAt = isAccessToken
-    ? (jwt.decode(token) as JwtPayload)?.exp! * 1000
-    : undefined;
+  // const expiresAt = isAccessToken ? (jwt.decode(token) as JwtPayload)?.exp! * 1000 : undefined;
+
+  const payloadJwt = jwt.decode(token) as JwtPayload;
+  const expiresAt = isAccessToken && payloadJwt?.exp ? payloadJwt.exp * 1000 : undefined;
 
   //Returns the token string and its expiration time.
   return {

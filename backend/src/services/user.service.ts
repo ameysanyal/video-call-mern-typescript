@@ -1,6 +1,6 @@
-import User, { UserDocument } from "@/models/user.model.js";
-import { Logger, winstonLogger } from "@/config/logger.js"; // Example dependency for DI
-import { Types } from "mongoose";
+import User, { UserDocument } from '@/models/user.model.js';
+import { Logger, winstonLogger } from '@/config/logger.js'; // Example dependency for DI
+import { Types } from 'mongoose';
 
 // Define an interface for the service for better type checking and DI
 export interface IUserService {
@@ -8,14 +8,9 @@ export interface IUserService {
     currentUserId: string | Types.ObjectId,
     currentUserFriends: Types.ObjectId[]
   ): Promise<UserDocument[]>;
-  getUserFriends(
-    userId: string | Types.ObjectId
-  ): Promise<UserDocument[] | null>;
+  getUserFriends(userId: string | Types.ObjectId): Promise<UserDocument[] | null>;
   findUserById(userId: string | Types.ObjectId): Promise<UserDocument | null>;
-  addFriendToUser(
-    userId: string | Types.ObjectId,
-    friendId: string
-  ): Promise<UserDocument | null>;
+  addFriendToUser(userId: string | Types.ObjectId, friendId: string): Promise<UserDocument | null>;
   findUserByEmail(email: string): Promise<UserDocument | null>;
   createUser(userData: {
     email: string;
@@ -24,10 +19,7 @@ export interface IUserService {
     profilePic: string;
     isOnboarded?: boolean;
   }): Promise<UserDocument>;
-  updateUserById(
-    userId: string | Types.ObjectId,
-    updates: any
-  ): Promise<UserDocument | null>;
+  updateUserById(userId: string | Types.ObjectId, updates: any): Promise<UserDocument | null>;
 }
 
 export class UserService implements IUserService {
@@ -60,10 +52,7 @@ export class UserService implements IUserService {
       this.logger.debug(`Found ${recommendedUsers.length} recommended users.`);
       return recommendedUsers;
     } catch (error) {
-      this.logger.error(
-        `Error fetching recommended users for ${currentUserId}:`,
-        error
-      );
+      this.logger.error(`Error fetching recommended users for ${currentUserId}:`, error);
       throw error; // Re-throw to be caught by asyncHandler
     }
   }
@@ -71,18 +60,15 @@ export class UserService implements IUserService {
   /**
    * Fetches the friends of a specific user.
    */
-  async getUserFriends(
-    userId: string | Types.ObjectId
-  ): Promise<UserDocument[] | null> {
+  async getUserFriends(userId: string | Types.ObjectId): Promise<UserDocument[] | null> {
     this.logger.debug(`Fetching friends for user ${userId}`);
     try {
       const user = (await this.userModel
         .findById(userId)
-        .select("friends")
-        .populate(
-          "friends",
-          "fullName profilePic nativeLanguage learningLanguage"
-        )) as (UserDocument & { friends: UserDocument[] }) | null; // Cast for populated friends
+        .select('friends')
+        .populate('friends', 'fullName profilePic nativeLanguage learningLanguage')) as
+        | (UserDocument & { friends: UserDocument[] })
+        | null; // Cast for populated friends
 
       return user ? user.friends : null;
     } catch (error) {
@@ -94,9 +80,7 @@ export class UserService implements IUserService {
   /**
    * Finds a user by their ID.
    */
-  async findUserById(
-    userId: string | Types.ObjectId
-  ): Promise<UserDocument | null> {
+  async findUserById(userId: string | Types.ObjectId): Promise<UserDocument | null> {
     this.logger.debug(`Finding user by ID: ${userId}`);
     try {
       return await this.userModel.findById(userId);
@@ -121,10 +105,7 @@ export class UserService implements IUserService {
         { new: true } // Return the updated document
       );
     } catch (error) {
-      this.logger.error(
-        `Error adding friend ${friendId} to user ${userId}:`,
-        error
-      );
+      this.logger.error(`Error adding friend ${friendId} to user ${userId}:`, error);
       throw error;
     }
   }
@@ -155,10 +136,7 @@ export class UserService implements IUserService {
       this.logger.debug(`New user created with ID: ${newUser._id}`);
       return newUser;
     } catch (error) {
-      this.logger.error(
-        `Error creating user with email ${userData.email}:`,
-        error
-      );
+      this.logger.error(`Error creating user with email ${userData.email}:`, error);
       throw error;
     }
   }

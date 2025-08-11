@@ -1,12 +1,12 @@
-import { describe, it, expect, vi } from "vitest";
-import { asyncHandler } from "../../../src/middlewares/asynchandler.middleware.js";
-import { Request, Response, NextFunction } from "express";
+import { describe, it, expect, vi } from 'vitest';
+import { asyncHandler } from '../../../src/middlewares/asynchandler.middleware.js';
+import { Request, Response } from 'express';
 
-describe("asyncHandler", () => {
+describe('asyncHandler', () => {
   const mockReq = {} as Request;
   const mockRes = {} as Response;
 
-  it("should call the controller function", async () => {
+  it('should call the controller function', async () => {
     const controller = vi.fn().mockResolvedValue(undefined);
     const next = vi.fn();
 
@@ -17,8 +17,8 @@ describe("asyncHandler", () => {
     expect(next).not.toHaveBeenCalledWith(expect.any(Error));
   });
 
-  it("should pass errors to next()", async () => {
-    const error = new Error("Test error");
+  it('should pass errors to next()', async () => {
+    const error = new Error('Test error');
     const controller = vi.fn().mockRejectedValue(error);
     const next = vi.fn();
 

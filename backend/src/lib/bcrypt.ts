@@ -1,4 +1,4 @@
-import bcrypt from "bcrypt";
+import bcrypt from 'bcrypt';
 
 // Hashes a given string (e.g. a password).
 export const hashValue = async (value: string, saltRounds: number = 10) =>

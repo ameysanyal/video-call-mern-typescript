@@ -1,5 +1,5 @@
-import mongoose, { Document, Types } from "mongoose";
-import { compareValue, hashValue } from "@/lib/bcrypt.js";
+import mongoose, { Document, Types } from 'mongoose';
+import { compareValue, hashValue } from '@/lib/bcrypt.js';
 
 export interface UserDocument extends Document {
   _id: Types.ObjectId;
@@ -40,23 +40,23 @@ const userSchema = new mongoose.Schema<UserDocument>(
     },
     bio: {
       type: String,
-      default: "",
+      default: '',
     },
     profilePic: {
       type: String,
-      default: "",
+      default: '',
     },
     nativeLanguage: {
       type: String,
-      default: "",
+      default: '',
     },
     learningLanguage: {
       type: String,
-      default: "",
+      default: '',
     },
     location: {
       type: String,
-      default: "",
+      default: '',
     },
     isOnboarded: {
       type: Boolean,
@@ -65,7 +65,7 @@ const userSchema = new mongoose.Schema<UserDocument>(
     friends: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
+        ref: 'User',
       },
     ],
   },
@@ -73,8 +73,8 @@ const userSchema = new mongoose.Schema<UserDocument>(
 );
 
 //Pre-save Middleware for Password Hashing
-userSchema.pre("save", async function (next) {
-  if (!this.isModified("password")) return next();
+userSchema.pre('save', async function (next) {
+  if (!this.isModified('password')) return next();
 
   try {
     this.password = await hashValue(this.password);
@@ -92,7 +92,7 @@ userSchema.methods.matchPassword = async function (enteredPassword: string) {
 
 //This is a TypeScript generic type parameter
 //UserDocument type enforces TypeScript safety on .save(), .find(), etc.
-const User = mongoose.model<UserDocument>("User", userSchema);
+const User = mongoose.model<UserDocument>('User', userSchema);
 
 export default User;
 

@@ -1,28 +1,28 @@
-import mongoose, { Document, Types } from "mongoose";
-import { UserDocument } from "@/models/user.model.js";
+import mongoose, { Document, Types } from 'mongoose';
+import { UserDocument } from '@/models/user.model.js';
 
 export interface FriendRequestDocument extends Document {
   sender: UserDocument | Types.ObjectId;
   recipient: UserDocument | Types.ObjectId;
-  status: "pending" | "accepted" | "rejected";
+  status: 'pending' | 'accepted' | 'rejected';
 }
 
 const friendRequestSchema = new mongoose.Schema<FriendRequestDocument>(
   {
     sender: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
+      ref: 'User',
       required: true,
     },
     recipient: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
+      ref: 'User',
       required: true,
     },
     status: {
       type: String,
-      enum: ["pending", "accepted", "rejected"],
-      default: "pending",
+      enum: ['pending', 'accepted', 'rejected'],
+      default: 'pending',
     },
   },
   {
@@ -30,9 +30,6 @@ const friendRequestSchema = new mongoose.Schema<FriendRequestDocument>(
   }
 );
 
-const FriendRequest = mongoose.model<FriendRequestDocument>(
-  "FriendRequest",
-  friendRequestSchema
-);
+const FriendRequest = mongoose.model<FriendRequestDocument>('FriendRequest', friendRequestSchema);
 
 export default FriendRequest;
