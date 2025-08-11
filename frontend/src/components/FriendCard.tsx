@@ -1,20 +1,21 @@
 import { Link } from 'react-router';
+
 import { LANGUAGE_TO_FLAG, type LanguageFlag } from '@/constants';
 
-interface UserFriend {
-  _id: string; 
+type UserFriend = {
+  _id: string;
   fullName: string;
   profilePic: string;
   nativeLanguage: LanguageFlag;
   learningLanguage: LanguageFlag;
-  location:string
-  bio:string
+  location: string;
+  bio: string;
   // Add any other properties of a 'friend' object if they are passed to this component
-}
+};
 
-interface FriendCardProps {
+type FriendCardProps = {
   friend: UserFriend;
-}
+};
 
 export function getLanguageFlag(language: LanguageFlag) {
   if (!language) return null;

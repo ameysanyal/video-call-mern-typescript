@@ -1,5 +1,11 @@
-import React, { useEffect, useState } from 'react'; // Explicitly import React
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { AxiosError } from 'axios';
+import { CheckCircleIcon, MapPinIcon, UserPlusIcon, UsersIcon } from 'lucide-react';
+import React, { useEffect, useState } from 'react'; // Explicitly import React
+import { Link } from 'react-router';
+
+import FriendCard, { getLanguageFlag } from '@/components/FriendCard'; // Adjust path, FriendCard needs props typed
+import NoFriendsFound from '@/components/NoFriendsFound'; // Adjust path
 import {
   getOutgoingFriendReqs,
   getRecommendedUsers,
@@ -8,12 +14,7 @@ import {
   type UserFriend,
   type FriendRequest,
 } from '@/lib/api';
-import { Link } from 'react-router';
-import { CheckCircleIcon, MapPinIcon, UserPlusIcon, UsersIcon } from 'lucide-react';
-import { AxiosError } from 'axios';
 import { capitialize } from '@/lib/utils'; // Adjust path (../lib/utils -> @/lib/utils)
-import FriendCard, { getLanguageFlag } from '@/components/FriendCard'; // Adjust path, FriendCard needs props typed
-import NoFriendsFound from '@/components/NoFriendsFound'; // Adjust path
 import { useThemeStore } from '@/store/useThemeStore.js';
 // Assuming FriendCard.tsx defines these types or it's implicitly typed via usage
 // Example of how FriendCard's props might be typed:

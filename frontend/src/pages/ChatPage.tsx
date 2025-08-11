@@ -1,10 +1,13 @@
-import React, { useEffect, useState } from 'react'; // Explicitly import React
-import { useParams } from 'react-router';
-import useAuthUser from '@/hooks/useAuthUser'; // Assuming this is already typed
 import { useQuery } from '@tanstack/react-query';
-import { getStreamToken, type StreamTokenResponse } from '@/lib/api';
 import axios, { AxiosError } from 'axios';
-
+import React, { useEffect, useState } from 'react'; // Explicitly import React
+import toast from 'react-hot-toast';
+import { useParams } from 'react-router';
+import {
+  StreamChat,
+  Channel as StreamChannel, // Alias Channel type from stream-chat to avoid conflict
+  type User as StreamChatUser, // Alias User type from stream-chat
+} from 'stream-chat';
 import {
   Channel,
   ChannelHeader,
@@ -16,15 +19,11 @@ import {
   // You might also need to import specific types from 'stream-chat-react'
   // For instance, if you interact with StreamChat in a way that requires their types for Channel
 } from 'stream-chat-react';
-import {
-  StreamChat,
-  Channel as StreamChannel, // Alias Channel type from stream-chat to avoid conflict
-  type User as StreamChatUser, // Alias User type from stream-chat
-} from 'stream-chat';
-import toast from 'react-hot-toast';
 
-import ChatLoader from '@/components/ChatLoader'; // Assuming this is already typed
 import CallButton from '@/components/CallButton'; // Assuming this is already typed
+import ChatLoader from '@/components/ChatLoader'; // Assuming this is already typed
+import useAuthUser from '@/hooks/UseAuthUser'; // Assuming this is already typed
+import { getStreamToken, type StreamTokenResponse } from '@/lib/api';
 
 const STREAM_API_KEY: string = import.meta.env.VITE_STREAM_API_KEY;
 
@@ -32,7 +31,6 @@ const ChatPage = (): React.JSX.Element => {
   // Use useParams with a generic type to specify expected params
   const { id: targetUserId } = useParams<{ id: string }>(); // 'id' will be typed as string
 
-  // console.log('STREAM_API_KEY', STREAM_API_KEY);
   // Type useState hooks with specific Stream SDK types or null/undefined
   const [chatClient, setChatClient] = useState<StreamChat | null>(null);
   const [channel, setChannel] = useState<StreamChannel | null>(null); // Use StreamChannel from 'stream-chat'
@@ -40,35 +38,24 @@ const ChatPage = (): React.JSX.Element => {
 
   const { authUser } = useAuthUser(); // useAuthUser returns { authUser: AuthUser | null | undefined, ... }
 
-  // console.log('authUser', authUser);
-
   // Type useQuery for getStreamToken
   const { data: tokenData } = useQuery<StreamTokenResponse, AxiosError>({
     queryKey: ['streamToken'],
     queryFn: getStreamToken,
     enabled: !!authUser, // Only run query if authUser exists
   });
-  // console.log('tokendata', tokenData);
 
   useEffect(() => {
     const initChat = async () => {
-      console.log('User ID:', authUser?._id);
-      console.log('Stream Token:', tokenData?.data);
-      console.log('Stream API Key (frontend):', STREAM_API_KEY);
       // Ensure all necessary data is available and typed correctly
       if (!tokenData?.data || !authUser || !targetUserId) {
-        console.log('Missing data for chat initialization', { tokenData, authUser, targetUserId });
         setLoading(false); // Stop loading if essential data is missing
         return;
       }
 
       try {
-        console.log('Initializing Stream chat client...');
-
         // Ensure the client is a new instance for each connection
         const client = StreamChat.getInstance(STREAM_API_KEY);
-
-        console.log('client', client);
 
         // Map your AuthUser to StreamChat's User type
         const user: StreamChatUser = {
@@ -99,13 +86,11 @@ const ChatPage = (): React.JSX.Element => {
         // Type 'error' as unknown for safety
         if (axios.isAxiosError(error)) {
           // Check if it's an Axios error
-          console.error('Axios Error initializing chat:', error.message, error.response?.data);
+
           toast.error(`Error connecting: ${error.response?.data?.message || error.message}`);
         } else if (error instanceof Error) {
-          console.error('General Error initializing chat:', error.message);
           toast.error(`Could not connect to chat: ${error.message}. Please try again.`);
         } else {
-          console.error('Unknown Error initializing chat:', error);
           toast.error('An unexpected error occurred. Please try again.');
         }
       } finally {
@@ -122,7 +107,6 @@ const ChatPage = (): React.JSX.Element => {
     return () => {
       if (chatClient) {
         chatClient.disconnectUser();
-        console.log('Disconnected Stream chat client.');
       }
     };
   }, [tokenData, authUser, targetUserId, chatClient]); // Add chatClient to dependencies for proper cleanup

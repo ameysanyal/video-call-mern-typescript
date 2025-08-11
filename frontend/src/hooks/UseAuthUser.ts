@@ -1,13 +1,14 @@
 import { useQuery } from '@tanstack/react-query';
+
 // Import getAuthUser and the AuthUser interface (and AxiosError for error typing)
 import { getAuthUser, type AuthUser } from '@/lib/api';
 import { AxiosError } from '@/lib/axios';
 
 // 1. Define the return type of your custom hook
-interface UseAuthUserReturn {
+type UseAuthUserReturn = {
   isLoading: boolean;
   authUser: AuthUser | null | undefined; // authUser.data can be AuthUser | null, and useQuery's data can be undefined initially
-}
+};
 
 const useAuthUser = (): UseAuthUserReturn => {
   // 2. Specify the generic types for useQuery:

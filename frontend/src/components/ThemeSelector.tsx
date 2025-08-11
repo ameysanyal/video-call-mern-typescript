@@ -1,6 +1,7 @@
-import { PaletteIcon } from "lucide-react";
-import { useThemeStore } from "@/store/useThemeStore";
-import { THEMES } from "@/constants";
+import { PaletteIcon } from 'lucide-react';
+
+import { THEMES } from '@/constants';
+import { useThemeStore } from '@/store/useThemeStore';
 
 const ThemeSelector = () => {
   const { theme, setTheme } = useThemeStore();
@@ -25,8 +26,8 @@ const ThemeSelector = () => {
               w-full px-4 py-3 rounded-xl flex items-center gap-3 transition-colors
               ${
                 theme === themeOption.name
-                  ? "bg-primary/10 text-primary"
-                  : "hover:bg-base-content/5"
+                  ? 'bg-primary/10 text-primary'
+                  : 'hover:bg-base-content/5'
               }
             `}
               onClick={() => setTheme(themeOption.name)}

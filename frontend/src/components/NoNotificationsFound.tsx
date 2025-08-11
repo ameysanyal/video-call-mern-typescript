@@ -1,4 +1,4 @@
-import { BellIcon } from "lucide-react";
+import { BellIcon } from 'lucide-react';
 
 function NoNotificationsFound(): React.JSX.Element {
   return (

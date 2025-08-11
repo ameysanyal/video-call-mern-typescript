@@ -1,11 +1,3 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router';
-import useAuthUser from '@/hooks/useAuthUser'; // Assuming this is already typed
-import { useQuery } from '@tanstack/react-query';
-// Import StreamTokenResponse and AuthUser types, and getStreamToken function
-import { getStreamToken, type StreamTokenResponse } from '@/lib/api';
-import axios, { AxiosError } from 'axios';
-
 import {
   StreamVideo,
   StreamVideoClient,
@@ -18,10 +10,19 @@ import {
   useCallStateHooks,
   type User as StreamUser, // Alias User type from Stream SDK to avoid conflict with our AuthUser
 } from '@stream-io/video-react-sdk';
+import { useQuery } from '@tanstack/react-query';
+import axios, { AxiosError } from 'axios';
+import React, { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
+import { useNavigate, useParams } from 'react-router';
+
+import PageLoader from '@/components/PageLoader'; // Assuming this is already typed
 
 import '@stream-io/video-react-sdk/dist/css/styles.css';
-import toast from 'react-hot-toast';
-import PageLoader from '@/components/PageLoader'; // Assuming this is already typed
+
+import useAuthUser from '@/hooks/UseAuthUser'; // Assuming this is already typed
+// Import StreamTokenResponse and AuthUser types, and getStreamToken function
+import { getStreamToken, type StreamTokenResponse } from '@/lib/api';
 
 const STREAM_API_KEY: string = import.meta.env.VITE_STREAM_API_KEY;
 
@@ -48,14 +49,11 @@ const CallPage = (): React.JSX.Element => {
     const initCall = async () => {
       // Ensure all necessary data is available and typed correctly
       if (!tokenData?.data || !authUser || !callId) {
-        // console.log("Missing data for call initialization", { tokenData, authUser, callId });
         setIsConnecting(false); // Stop loading if essential data is missing
         return;
       }
 
       try {
-        console.log('Initializing Stream video client...');
-
         // Map your AuthUser to Stream's User type
         const user: StreamUser = {
           id: authUser._id,
@@ -74,20 +72,15 @@ const CallPage = (): React.JSX.Element => {
         // 'create: true' ensures the call is created if it doesn't exist
         await callInstance.join({ create: true });
 
-        console.log('Joined call successfully');
-
         setClient(videoClient);
         setCall(callInstance);
       } catch (error: unknown) {
         // Use axios.isAxiosError for better error typing if it's an API error
         if (axios.isAxiosError(error)) {
-          console.error('Axios Error joining call:', error.message, error.response?.data);
           toast.error(`Error joining call: ${error.response?.data?.message || error.message}`);
         } else if (error instanceof Error) {
-          console.error('General Error joining call:', error.message);
           toast.error(`Could not join the call: ${error.message}. Please try again.`);
         } else {
-          console.error('Unknown error joining call:', error);
           toast.error('An unexpected error occurred. Please try again.');
         }
       } finally {
@@ -105,7 +98,6 @@ const CallPage = (): React.JSX.Element => {
     return () => {
       // Disconnect client when component unmounts or dependencies change
       if (client) {
-        console.log('Disconnecting Stream video client...');
         client.disconnectUser();
       }
     };

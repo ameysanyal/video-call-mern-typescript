@@ -1,20 +1,19 @@
-import axios from 'axios';
-import { axiosInstance } from '@/lib/axios'; // Assuming axiosInstance is configured correctly
 import { type LanguageFlag } from '@/constants';
+import { axiosInstance } from '@/lib/axios'; // Assuming axiosInstance is configured correctly
 
-export interface UserSignupData {
+export type UserSignupData = {
   email: string;
   password: string;
   fullName: string;
-}
+};
 
-export interface UserLoginData {
+export type UserLoginData = {
   email: string;
   password: string;
-}
+};
 
 // Data shape for the authenticated user (adjust as per your User model)
-export interface AuthUser {
+export type AuthUser = {
   _id: string;
   user: any;
   fullName: string;
@@ -27,17 +26,17 @@ export interface AuthUser {
   bio: string;
   location: string;
   // Add other user fields as needed
-}
+};
 
 // Response for signup/login that might include user data and/or a message
-export interface AuthResponse {
+export type AuthResponse = {
   message?: string;
   user: AuthUser;
   token?: string; // If your backend returns a token directly
-}
+};
 
 // Data shape for onboarding (adjust as per your onboarding requirements)
-export interface OnboardingData {
+export type OnboardingData = {
   fullName: string;
   nativeLanguage: string;
   learningLanguage: string;
@@ -46,10 +45,10 @@ export interface OnboardingData {
   isOnboarded?: boolean; // Often set by the backend, but might be sent
   location: string;
   // Add other fields relevant to onboarding
-}
+};
 
 // Data shape for a user in a friend list (often a subset of AuthUser)
-export interface UserFriend {
+export type UserFriend = {
   _id: string;
   fullName: string;
   profilePic: string;
@@ -58,39 +57,39 @@ export interface UserFriend {
   location: string;
   bio: string;
   // Add other relevant fields for display
-}
+};
 
 // Data shape for a friend request
-export interface FriendRequest {
+export type FriendRequest = {
   _id: string;
   sender: UserFriend; // Populated sender
   recipient: UserFriend; // Populated recipient
   status: 'pending' | 'accepted' | 'rejected';
   createdAt: string;
   updatedAt: string;
-}
+};
 
 // NEW: Combined interface for the getFriendRequests response
-export interface FriendRequestsResponse {
+export type FriendRequestsResponse = {
   incomingReqs: FriendRequest[];
   outgoingReqs: FriendRequest[];
   acceptedReqs?: FriendRequest[];
-}
+};
 
 // Stream token response
-export interface StreamTokenResponse {
+export type StreamTokenResponse = {
   data: string;
-}
+};
 
 export const signup = async (signupData: UserSignupData): Promise<AuthResponse> => {
   const response = await axiosInstance.post<AuthResponse>('/auth/signup', signupData);
-  console.log('signup response:', response.data);
+
   return response.data;
 };
 
 export const login = async (loginData: UserLoginData): Promise<AuthResponse> => {
   const response = await axiosInstance.post<{ data: AuthResponse }>('/auth/login', loginData);
-  console.log('login response:', response.data);
+
   return response.data.data;
 };
 
@@ -101,23 +100,9 @@ export const logout = async (): Promise<void> => {
 };
 
 export const getAuthUser = async (): Promise<AuthUser | null> => {
-  try {
-    const res = await axiosInstance.get<AuthUser>('/auth/me');
-    console.log('getAuthUser:', res.data.user);
-    return res.data.user;
-  } catch (error: unknown) {
-    // Type 'error' as unknown for safety
-    if (axios.isAxiosError(error)) {
-      // Check if it's an Axios error
-      console.error('Axios Error in getAuthUser:', error.message);
-      if (error.response) {
-        console.error('Response data:', error.response.data);
-      }
-    } else {
-      console.error('Unknown Error in getAuthUser:', error);
-    }
-    return null;
-  }
+  const res = await axiosInstance.get<AuthUser>('/auth/me');
+
+  return res.data.user;
 };
 
 export const completeOnboarding = async (userData: OnboardingData): Promise<AuthResponse> => {
@@ -127,13 +112,13 @@ export const completeOnboarding = async (userData: OnboardingData): Promise<Auth
 
 export async function getUserFriends(): Promise<UserFriend[]> {
   const response = await axiosInstance.get<{ data: UserFriend[] }>('/users/friends');
-  // console.log('getUserFriends', response.data.data);
+
   return response.data.data || [];
 }
 
 export async function getRecommendedUsers(): Promise<UserFriend[]> {
   const response = await axiosInstance.get<{ data: UserFriend[] }>('/users');
-  // console.log('getRecommendedUsers', response.data.data);
+
   return response.data.data || [];
 }
 
@@ -142,14 +127,14 @@ export async function getOutgoingFriendReqs(): Promise<FriendRequest[]> {
   const response = await axiosInstance.get<{ data: FriendRequest[] }>(
     '/users/outgoing-friend-requests'
   );
-  console.log('getOutgoingFriendReqs', response.data.data);
+
   return response.data.data || [];
 }
 
 export async function sendFriendRequest(userId: string): Promise<FriendRequest> {
   // Assuming this returns the newly created friend request object
   const response = await axiosInstance.post<FriendRequest>(`/users/friend-request/${userId}`);
-  console.log(response.data);
+
   return response.data;
 }
 
@@ -164,7 +149,6 @@ export async function getFriendRequests(): Promise<{
     data: { incomingReqs: FriendRequest[]; outgoingReqs: FriendRequest[] };
   }>('/users/friend-requests');
 
-  console.log('getFriendRequests', response.data);
   return response.data.data || { incomingReqs: [], outgoingReqs: [] };
 }
 
@@ -178,6 +162,6 @@ export async function acceptFriendRequest(requestId: string): Promise<{ message:
 
 export async function getStreamToken(): Promise<StreamTokenResponse> {
   const response = await axiosInstance.get<StreamTokenResponse>('/chat/token');
-  console.log('getStreamToken', response.data);
+
   return response.data;
 }

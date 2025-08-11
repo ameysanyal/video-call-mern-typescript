@@ -1,15 +1,16 @@
-import React, { useState, type ChangeEvent, type FormEvent } from 'react'; // Explicitly import React and event types
-import useAuthUser from '@/hooks/useAuthUser'; // Assuming this hook is also typed
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import toast from 'react-hot-toast';
-import { completeOnboarding, type OnboardingData, type AuthResponse } from '@/lib/api'; // Import OnboardingData and AuthResponse
 import { AxiosError } from 'axios'; // Import AxiosError for mutation error handling
 import { LoaderIcon, MapPinIcon, ShipWheelIcon, ShuffleIcon, CameraIcon } from 'lucide-react';
-import { LANGUAGES } from '@/constants'; // Assuming LANGUAGES is an array of strings
+import React, { useState, type ChangeEvent, type FormEvent } from 'react'; // Explicitly import React and event types
+import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router';
 
+import { LANGUAGES } from '@/constants'; // Assuming LANGUAGES is an array of strings
+import useAuthUser from '@/hooks/UseAuthUser'; // Assuming this hook is also typed
+import { completeOnboarding, type OnboardingData, type AuthResponse } from '@/lib/api'; // Import OnboardingData and AuthResponse
+
 // Define the interface for your form state
-interface OnboardingFormState {
+type OnboardingFormState = {
   fullName: string;
   bio: string;
   nativeLanguage: string;
@@ -17,7 +18,7 @@ interface OnboardingFormState {
   location: string;
   profilePic: string;
   isOnboarded: boolean;
-}
+};
 
 const OnboardingPage = (): React.JSX.Element => {
   // useAuthUser hook should return an object with authUser of type AuthUser | null

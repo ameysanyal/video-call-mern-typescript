@@ -1,16 +1,13 @@
 {
   "files": [],
-  "references": [
-    { "path": "./tsconfig.app.json" },
-    { "path": "./tsconfig.node.json" }
-  ],
- "compilerOptions": {
+  "references": [{ "path": "./tsconfig.app.json" }, { "path": "./tsconfig.node.json" }],
+  "compilerOptions": {
     /* Path Aliases */
     "baseUrl": "./src", // Base directory for resolving non-relative modules
     "paths": {
       "@/*": ["*"] // Maps @/ to anything directly under baseUrl (i.e., 'src/')
       // Note: "src/*" is also common here if baseUrl is '.'
-    },
+    }
     // "include": ["src"] // Tells TypeScript which files to compile
-  },
+  }
 }

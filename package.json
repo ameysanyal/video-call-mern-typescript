@@ -1,0 +1,22 @@
+{
+  "devDependencies": {
+    "husky": "^9.1.7",
+    "lint-staged": "^16.1.5"
+  },
+  "lint-staged": {
+    "backend/**/*.{ts,js}": [
+      "npm --prefix backend run lint:fix",
+      "npm --prefix backend run format"
+    ],
+    "frontend/**/*.{ts,js,jsx,tsx}": [
+      "npm --prefix frontend run lint:fix",
+      "npm --prefix frontend run format"
+    ],
+    "backend/**/*.{md,json}": [
+      "npm --prefix backend run format"
+    ]
+  },
+  "scripts": {
+    "prepare": "husky"
+  }
+}

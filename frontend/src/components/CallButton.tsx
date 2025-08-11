@@ -1,8 +1,8 @@
 import { VideoIcon } from 'lucide-react';
 
-interface CallButtonProps {
+type CallButtonProps = {
   handleVideoCall: () => void;
-}
+};
 
 function CallButton({ handleVideoCall }: CallButtonProps) {
   return (

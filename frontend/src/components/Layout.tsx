@@ -1,15 +1,16 @@
-import React from "react"; // Explicitly import React
-import Sidebar from "@/components/Sidebar";
-import Navbar from "@/components/Navbar";
+import React from 'react'; // Explicitly import React
 
-interface LayoutProps {
+import Navbar from '@/components/Navbar';
+import Sidebar from '@/components/Sidebar';
+
+type LayoutProps = {
   /**
    * The content to be rendered inside the layout.
    * Can be any valid React node (elements, strings, numbers, fragments, etc.).
    */
   children: React.ReactNode;
   showSidebar?: boolean;
-}
+};
 
 const Layout = ({ children, showSidebar = false }: LayoutProps): React.JSX.Element => {
   return (

@@ -1,15 +1,16 @@
+import { Toaster } from 'react-hot-toast';
 import { Navigate, Route, Routes } from 'react-router';
-import HomePage from '@/pages/HomePage';
-import SignUpPage from '@/pages/SignUpPage';
-import LoginPage from '@/pages/LoginPage';
-import NotificationsPage from '@/pages/NotificationsPage';
+
+import Layout from '@/components/Layout.jsx';
+import PageLoader from '@/components/PageLoader.jsx';
+import useAuthUser from '@/hooks/UseAuthUser.js';
 import CallPage from '@/pages/CallPage';
 import ChatPage from '@/pages/ChatPage';
+import HomePage from '@/pages/HomePage';
+import LoginPage from '@/pages/LoginPage';
+import NotificationsPage from '@/pages/NotificationsPage';
 import OnboardingPage from '@/pages/OnboardingPage';
-import { Toaster } from 'react-hot-toast';
-import PageLoader from '@/components/PageLoader.jsx';
-import useAuthUser from '@/hooks/useAuthUser.js';
-import Layout from '@/components/Layout.jsx';
+import SignUpPage from '@/pages/SignUpPage';
 import { useThemeStore } from '@/store/useThemeStore.js';
 
 const App = () => {

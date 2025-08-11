@@ -1,11 +1,12 @@
-import React, { useState, type ChangeEvent, type FormEvent } from 'react'; // Explicitly import React and event types
+import { AxiosError } from 'axios'; // Import AxiosError for consistent error typing
 import { ShipWheelIcon } from 'lucide-react';
+import React, { useState, type ChangeEvent, type FormEvent } from 'react'; // Explicitly import React and event types
+import toast from 'react-hot-toast';
 import { Link } from 'react-router';
 
-import useSignUp from '../hooks/useSignUp'; // Ensure this path is correct relative to the file
 import { type UserSignupData } from '@/lib/api'; // Import the UserSignupData interface
-import { AxiosError } from 'axios'; // Import AxiosError for consistent error typing
-import toast from 'react-hot-toast';
+
+import useSignUp from '../hooks/UseSignUp.js'; // Ensure this path is correct relative to the file
 
 const SignUpPage = (): React.JSX.Element => {
   // 1. Type the signupData state

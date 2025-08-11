@@ -1,5 +1,6 @@
-import { LoaderIcon } from "lucide-react";
-import { useThemeStore } from "@/store/useThemeStore";
+import { LoaderIcon } from 'lucide-react';
+
+import { useThemeStore } from '@/store/useThemeStore';
 
 const PageLoader = (): React.JSX.Element => {
   const { theme } = useThemeStore();
