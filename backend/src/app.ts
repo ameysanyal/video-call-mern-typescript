@@ -16,7 +16,8 @@ import { morganMiddleware } from '@/config/morgan.config.js';
 // Create the Express app instance
 const app = express();
 app.use(helmet());
-app.set('trust proxy', 1);
+app.set('trust proxy', 1); //tells Express to trust the first proxy in front of the application,
+// allowing it to correctly determine the client's original IP address and protocol.
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
