@@ -1,33 +1,23 @@
-# Stage 1: Build Node.js app
-FROM node:alpine3.18 AS build
+# Use a lightweight Node.js base image (Alpine Linux)
+FROM node:alpine3.18
 
+# Set the working directory inside the container
 WORKDIR /app
 
-# Install dependencies
+# Copy package manifests first to leverage Docker layer caching for deps
 COPY package*.json ./
+
+# Install dependencies
 RUN npm ci
 
-# Copy source code and build
+# Copy the rest of the application source code
 COPY . .
+
+# Build the TypeScript project into dist/
 RUN npm run build
 
-# Stage 2: Run with Nginx and Node.js
-FROM alpine:3.18
+# Expose the API port (keep in sync with app/server configuration)
+EXPOSE 5001
 
-# Install Node.js, npm, and Nginx
-RUN apk add --no-cache nodejs npm nginx
-
-# Copy built Node.js app from previous stage
-COPY --from=build /app /usr/src/app
-
-# Copy Nginx configuration
-COPY nginx/default.conf /etc/nginx/conf.d/default.conf
-
-# Set working directory
-WORKDIR /usr/src/app
-
-# Expose ports (Nginx on 80)
-EXPOSE 80
-
-# Start both Node.js app and Nginx
-CMD sh -c "node dist/src/server.js & nginx -g 'daemon off;'"
+# Start the application in production mode
+CMD ["npm", "run", "start"]
