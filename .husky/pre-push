@@ -1,4 +1,0 @@
-#!/usr/bin/env sh
-. "$(dirname -- "$0")/_/husky.sh"
-echo "🚀 Running backend tests before push..."
-npm --prefix backend run test

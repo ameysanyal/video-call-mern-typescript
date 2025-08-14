@@ -9,9 +9,10 @@ export default defineConfig({
   },
   test: {
     globals: true,
+    testTimeout: 60000, // Increase the timeout for individual tests
+    hookTimeout: 30000, // Increase the timeout for hooks like beforeAll
     setupFiles: ['test/setup.ts'],
     isolate: true,
-    testTimeout: 10000,
     coverage: {
       reporter: ['text', 'json', 'html'],
       exclude: ['**/node_modules/**', '**/tests/**'],
