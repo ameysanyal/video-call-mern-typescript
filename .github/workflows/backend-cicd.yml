@@ -5,8 +5,8 @@ on:
     branches:
       - main
     paths:
-      - 'backend/**'
-      - '.github/workflows/cicd.yml'
+      - "backend/**"
+      - ".github/workflows/backend-cicd.yml"
 
 jobs:
   build:
@@ -26,7 +26,7 @@ jobs:
 
   deploy:
     needs: build
-    runs-on: self-hosted
+    runs-on: [self-hosted, backend]
     steps:
       - name: Pull image from Docker Hub
         run: docker pull ameysanyal/video-call-backend:latest
