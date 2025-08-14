@@ -3,7 +3,7 @@ import { Navigate, Route, Routes } from 'react-router';
 
 import Layout from '@/components/Layout.jsx';
 import PageLoader from '@/components/PageLoader.jsx';
-import useAuthUser from '@/hooks/UseAuthUser.js';
+import useAuthUser from '@/hooks/useAuthUser.js';
 import CallPage from '@/pages/CallPage';
 import ChatPage from '@/pages/ChatPage';
 import HomePage from '@/pages/HomePage';

@@ -22,7 +22,7 @@ import {
 
 import CallButton from '@/components/CallButton'; // Assuming this is already typed
 import ChatLoader from '@/components/ChatLoader'; // Assuming this is already typed
-import useAuthUser from '@/hooks/UseAuthUser'; // Assuming this is already typed
+import useAuthUser from '@/hooks/useAuthUser'; // Assuming this is already typed
 import { getStreamToken, type StreamTokenResponse } from '@/lib/api';
 
 const STREAM_API_KEY: string = import.meta.env.VITE_STREAM_API_KEY;

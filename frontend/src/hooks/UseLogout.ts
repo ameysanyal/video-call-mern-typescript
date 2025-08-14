@@ -31,8 +31,10 @@ const useLogout = (): UseLogoutReturn => {
   } = useMutation<void, AxiosError, void, unknown>({
     mutationFn: logout, // mutationFn: () => Promise<void>
     onSuccess: () => {
-      // Invalidate the authUser query to clear authentication state
-      queryClient.invalidateQueries({ queryKey: ['authUser'] });
+      // Clear the authUser query data immediately to force redirect
+      queryClient.setQueryData(['authUser'], null);
+      // Also remove the query from cache to ensure fresh data on next load
+      queryClient.removeQueries({ queryKey: ['authUser'] });
     },
     // You can also add onError, onSettled callbacks here if needed
   });

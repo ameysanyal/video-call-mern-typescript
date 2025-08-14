@@ -16,6 +16,7 @@ import { morganMiddleware } from '@/config/morgan.config.js';
 // Create the Express app instance
 const app = express();
 app.use(helmet());
+app.set('trust proxy', 1);
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -23,7 +24,7 @@ const __dirname = path.dirname(__filename);
 // Configure middleware
 app.use(
   cors({
-    origin: 'http://localhost:5173',
+    origin: ['http://localhost:5173', 'http://localhost:5174'],
     credentials: true,
   })
 );

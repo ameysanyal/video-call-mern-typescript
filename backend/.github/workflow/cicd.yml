@@ -1,0 +1,47 @@
+name: Deploy video-call-mern-typescript backend
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'backend/**'
+      - '.github/workflows/cicd.yml'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Source
+        uses: actions/checkout@v4
+
+      - name: Login to Docker Hub
+        run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build Docker Image (Backend)
+        run: docker build -t ameysanyal/video-call-backend ./backend
+
+      - name: Push Docker Image to Docker Hub
+        run: docker push ameysanyal/video-call-backend:latest
+
+  deploy:
+    needs: build
+    runs-on: self-hosted
+    steps:
+      - name: Pull image from Docker Hub
+        run: docker pull ameysanyal/video-call-backend:latest
+
+      - name: Delete old container
+        run: docker rm -f backend-container || true
+
+      - name: Run Docker Container
+        run: |
+          docker run -d -p 5001:5001 \
+            --name backend-container \
+            -e MONGO_URI='${{ secrets.MONGO_URI }}' \
+            -e STREAM_API_KEY='${{ secrets.STREAM_API_KEY }}' \
+            -e STREAM_API_SECRET='${{ secrets.STREAM_API_SECRET }}' \
+            -e JWT_SECRET_KEY='${{ secrets.JWT_SECRET_KEY }}' \
+            -e JWT_EXPIRES_IN='${{ secrets.JWT_EXPIRES_IN }}' \
+            -e NODE_ENV='${{ secrets.NODE_ENV }}' \
+            ameysanyal/video-call-backend:latest

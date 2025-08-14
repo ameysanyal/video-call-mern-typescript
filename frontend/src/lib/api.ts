@@ -94,14 +94,12 @@ export const login = async (loginData: UserLoginData): Promise<AuthResponse> => 
 };
 
 export const logout = async (): Promise<void> => {
-  // Assuming logout returns no data or just a success message
   await axiosInstance.post('/auth/logout');
-  return; // Explicitly return void
+  return;
 };
 
 export const getAuthUser = async (): Promise<AuthUser | null> => {
   const res = await axiosInstance.get<AuthUser>('/auth/me');
-
   return res.data.user;
 };
 

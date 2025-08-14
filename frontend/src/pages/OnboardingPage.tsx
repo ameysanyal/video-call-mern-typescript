@@ -6,7 +6,7 @@ import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router';
 
 import { LANGUAGES } from '@/constants'; // Assuming LANGUAGES is an array of strings
-import useAuthUser from '@/hooks/UseAuthUser'; // Assuming this hook is also typed
+import useAuthUser from '@/hooks/useAuthUser.js'; // Assuming this hook is also typed
 import { completeOnboarding, type OnboardingData, type AuthResponse } from '@/lib/api'; // Import OnboardingData and AuthResponse
 
 // Define the interface for your form state

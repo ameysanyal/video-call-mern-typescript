@@ -20,7 +20,7 @@ import PageLoader from '@/components/PageLoader'; // Assuming this is already ty
 
 import '@stream-io/video-react-sdk/dist/css/styles.css';
 
-import useAuthUser from '@/hooks/UseAuthUser'; // Assuming this is already typed
+import useAuthUser from '@/hooks/useAuthUser'; // Assuming this is already typed
 // Import StreamTokenResponse and AuthUser types, and getStreamToken function
 import { getStreamToken, type StreamTokenResponse } from '@/lib/api';
 

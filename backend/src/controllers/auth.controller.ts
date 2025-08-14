@@ -108,7 +108,7 @@ const authController = {
       maxAge: 7 * 24 * 60 * 60 * 1000, //Sets the cookie to expire after 7 days.
       httpOnly: true, // prevent XSS attacks,
       sameSite: 'strict', // prevent CSRF attacks
-      secure: process.env.NODE_ENV === 'production',
+      secure: Env.NODE_ENV === 'production',
     });
 
     // This attaches the token to the browser as a cookie named jwt.

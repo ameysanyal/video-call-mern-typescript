@@ -1,2 +1,37 @@
+# Ignore dependencies
+
 node_modules
+
+# Ignore build artifacts
+
 dist
+build
+npm-debug.log\*
+
+# Ignore Git files and local environment files
+
+.git
+.gitignore
+.env
+.env.\*
+
+# Ignore editor and IDE files
+
+.vscode
+.idea
+
+# Ignore Docker build files
+
+# Dockerfile and .dockerignore must be available for the Docker daemon.
+
+# You can ignore them, but only if you are confident your build process
+
+# doesn't rely on them being in the build context. In most cases, it is safer
+
+# not to ignore these files.
+
+# Ignore test and documentation files (optional)
+
+# tests
+
+# \*.md

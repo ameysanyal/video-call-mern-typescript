@@ -6,7 +6,7 @@ import { Link } from 'react-router';
 
 import { type UserSignupData } from '@/lib/api'; // Import the UserSignupData interface
 
-import useSignUp from '../hooks/UseSignUp.js'; // Ensure this path is correct relative to the file
+import useSignUp from '../hooks/useSignUp.js'; // Ensure this path is correct relative to the file
 
 const SignUpPage = (): React.JSX.Element => {
   // 1. Type the signupData state

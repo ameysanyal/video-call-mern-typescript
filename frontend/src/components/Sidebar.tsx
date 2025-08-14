@@ -1,7 +1,7 @@
 import { BellIcon, HomeIcon, ShipWheelIcon, UsersIcon } from 'lucide-react';
 import { Link, useLocation } from 'react-router';
 
-import useAuthUser from '@/hooks/UseAuthUser';
+import useAuthUser from '@/hooks/useAuthUser';
 
 const Sidebar = (): React.JSX.Element => {
   const { authUser } = useAuthUser();
