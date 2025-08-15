@@ -55,6 +55,20 @@ if (Env.NODE_ENV === 'production') {
   });
 }
 
+['get', 'post', 'put', 'delete', 'patch', 'use'].forEach((method) => {
+  const original = app[method as keyof typeof app];
+  app[method as keyof typeof app] = function (...args: any[]) {
+    const path = args[0];
+    // If first arg is a function or array of functions, no path is specified
+    if (typeof path === 'function' || Array.isArray(path)) {
+      console.log(`[Route Register] app.${method}(<function or middleware>)`);
+    } else {
+      console.log(`[Route Register] app.${method}("${path}")`);
+    }
+    return original.apply(this, args);
+  };
+});
+
 // Simple root route
 app.get('/', (req, res) => {
   res.send(`hello checking backend`);

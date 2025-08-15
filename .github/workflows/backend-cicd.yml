@@ -19,7 +19,7 @@ jobs:
         run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build Docker Image (Backend)
-        run: docker build -t ameysanyal/video-call-backend ./backend
+        run: docker build --no-cache -t ameysanyal/video-call-backend ./backend
 
       - name: Push Docker Image to Docker Hub
         run: docker push ameysanyal/video-call-backend:latest

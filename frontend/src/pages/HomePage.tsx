@@ -15,7 +15,7 @@ import {
   type FriendRequest,
 } from '@/lib/api';
 import { capitialize } from '@/lib/utils'; // Adjust path (../lib/utils -> @/lib/utils)
-import { useThemeStore } from '@/store/useThemeStore.js';
+import { useThemeStore } from '@/store/useThemeStore';
 // Assuming FriendCard.tsx defines these types or it's implicitly typed via usage
 // Example of how FriendCard's props might be typed:
 // interface FriendCardProps {

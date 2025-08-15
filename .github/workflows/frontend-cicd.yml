@@ -11,7 +11,7 @@ on:
 jobs:
   build-and-deploy:
     name: Build and Upload React App to EC2
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, frontend]
 
     steps:
       - name: Checkout source code
@@ -20,7 +20,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 22
+          node-version: "22.12.0"
 
       - name: Install dependencies
         working-directory: ./frontend

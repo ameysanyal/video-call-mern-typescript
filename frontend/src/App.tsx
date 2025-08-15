@@ -1,9 +1,9 @@
 import { Toaster } from 'react-hot-toast';
 import { Navigate, Route, Routes } from 'react-router';
 
-import Layout from '@/components/Layout.jsx';
-import PageLoader from '@/components/PageLoader.jsx';
-import useAuthUser from '@/hooks/useAuthUser.js';
+import Layout from '@/components/Layout';
+import PageLoader from '@/components/PageLoader';
+import useAuthUser from '@/hooks/useAuthUser';
 import CallPage from '@/pages/CallPage';
 import ChatPage from '@/pages/ChatPage';
 import HomePage from '@/pages/HomePage';
@@ -11,7 +11,7 @@ import LoginPage from '@/pages/LoginPage';
 import NotificationsPage from '@/pages/NotificationsPage';
 import OnboardingPage from '@/pages/OnboardingPage';
 import SignUpPage from '@/pages/SignUpPage';
-import { useThemeStore } from '@/store/useThemeStore.js';
+import { useThemeStore } from '@/store/useThemeStore';
 
 const App = () => {
   const { isLoading, authUser } = useAuthUser();
