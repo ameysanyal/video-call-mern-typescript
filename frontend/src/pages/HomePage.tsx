@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react'; // Explicitly import React
 import { Link } from 'react-router';
 
 import FriendCard, { getLanguageFlag } from '@/components/FriendCard'; // Adjust path, FriendCard needs props typed
-import NoFriendsFound from '@/components/NoFriendsFound'; // Adjust path
+import NoFriendsFound from '@/components/NoFriendsFound';
 import {
   getOutgoingFriendReqs,
   getRecommendedUsers,
@@ -14,7 +14,7 @@ import {
   type UserFriend,
   type FriendRequest,
 } from '@/lib/api';
-import { capitialize } from '@/lib/utils'; // Adjust path (../lib/utils -> @/lib/utils)
+import { capitialize } from '@/lib/utils';
 import { useThemeStore } from '@/store/useThemeStore';
 // Assuming FriendCard.tsx defines these types or it's implicitly typed via usage
 // Example of how FriendCard's props might be typed:

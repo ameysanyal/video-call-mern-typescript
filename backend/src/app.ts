@@ -4,7 +4,7 @@ import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import path from 'path';
 import helmet from 'helmet';
-import { Env } from '@/config/env.config.js';
+// import { Env } from '@/config/env.config.js';
 import { errorHandler } from '@/middlewares/errorHandler.middleware.js';
 import swaggerRoute from '@/swagger.js';
 import authRoutes from '@/routes/auth.route.js';
@@ -48,29 +48,28 @@ app.use('/api/chat', chatRoutes);
 app.use('/api-docs', swaggerRoute);
 
 // Serve frontend in production
-if (Env.NODE_ENV === 'production') {
-  app.use(express.static(path.join(__dirname, '../frontend/dist')));
-  app.get('*', (req: Request, res: Response) => {
-    res.sendFile(path.join(__dirname, '../frontend', 'dist', 'index.html'));
-  });
-}
+// if (Env.NODE_ENV === 'production') {
+//   app.use(express.static(path.join(__dirname, '../frontend/dist')));
 
-['get', 'post', 'put', 'delete', 'patch', 'use'].forEach((method) => {
-  const original = app[method as keyof typeof app];
-  app[method as keyof typeof app] = function (...args: any[]) {
-    const path = args[0];
-    // If first arg is a function or array of functions, no path is specified
-    if (typeof path === 'function' || Array.isArray(path)) {
-      console.log(`[Route Register] app.${method}(<function or middleware>)`);
-    } else {
-      console.log(`[Route Register] app.${method}("${path}")`);
-    }
-    return original.apply(this, args);
-  };
-});
+//   // Catch-all route (fixed for Express 5)
+//   app.get('/:splat(*)', (req: Request, res: Response) => {
+//     res.sendFile(path.join(__dirname, '../frontend', 'dist', 'index.html'));
+//   });
+// }
+
+// const originalUse = app.use.bind(app);
+// app.use = (...args: any[]) => {
+//   try {
+//     console.log('app.use called with:', args[0]);
+//     return originalUse(...args);
+//   } catch (err) {
+//     console.error('Error in app.use:', err);
+//     throw err;
+//   }
+// };
 
 // Simple root route
-app.get('/', (req, res) => {
+app.get('/', (req: Request, res: Response) => {
   res.send(`hello checking backend`);
 });
 
