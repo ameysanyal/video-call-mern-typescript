@@ -10,6 +10,7 @@ import HomePage from '@/pages/HomePage';
 import LoginPage from '@/pages/LoginPage';
 import NotificationsPage from '@/pages/NotificationsPage';
 import OnboardingPage from '@/pages/OnboardingPage';
+import RecentChatsPage from '@/pages/RecentChatsPage';
 import SignUpPage from '@/pages/SignUpPage';
 import { useThemeStore } from '@/store/useThemeStore';
 
@@ -55,6 +56,18 @@ const App = () => {
             isAuthenticated && isOnboarded ? (
               <Layout showSidebar={true}>
                 <NotificationsPage />
+              </Layout>
+            ) : (
+              <Navigate to={!isAuthenticated ? '/login' : '/onboarding'} />
+            )
+          }
+        />
+        <Route
+          path="/recent-chats"
+          element={
+            isAuthenticated && isOnboarded ? (
+              <Layout showSidebar={true}>
+                <RecentChatsPage />
               </Layout>
             ) : (
               <Navigate to={!isAuthenticated ? '/login' : '/onboarding'} />

@@ -73,7 +73,7 @@ const authController = {
     res.cookie('jwt', token, {
       maxAge: 7 * 24 * 60 * 60 * 1000, //Sets the cookie to expire after 7 days.
       httpOnly: true, // prevent XSS attacks,
-      sameSite: 'none', // This is also crucial for cross-origin cookies
+      sameSite: Env.NODE_ENV === 'production' ? 'none' : 'strict', // This is also crucial for cross-origin cookies
       secure: Env.NODE_ENV === 'production', //This attribute ensures the cookie is only sent over HTTPS.
       path: '/',
     });
@@ -108,7 +108,7 @@ const authController = {
     res.cookie('jwt', token, {
       maxAge: 7 * 24 * 60 * 60 * 1000, //Sets the cookie to expire after 7 days.
       httpOnly: true, // prevent XSS attacks,
-      sameSite: 'none', // This is also crucial for cross-origin cookies
+      sameSite: Env.NODE_ENV === 'production' ? 'none' : 'strict', // This is also crucial for cross-origin cookies
       secure: Env.NODE_ENV === 'production', //This attribute ensures the cookie is only sent over HTTPS.
       path: '/',
     });
@@ -130,7 +130,13 @@ const authController = {
   }),
 
   logout: asyncHandler(async (req: Request, res: Response) => {
-    res.clearCookie('jwt');
+    res.clearCookie('jwt', {
+      httpOnly: true,
+      secure: Env.NODE_ENV === 'production',
+      sameSite: Env.NODE_ENV === 'production' ? 'none' : 'strict',
+      path: '/',
+    });
+
     return sendApiResponse(
       res,
       new ApiResponse({

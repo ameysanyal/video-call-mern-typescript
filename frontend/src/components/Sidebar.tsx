@@ -1,4 +1,4 @@
-import { BellIcon, HomeIcon, ShipWheelIcon, UsersIcon } from 'lucide-react';
+import { BellIcon, HomeIcon, MessageCircle, ShipWheelIcon, UsersIcon } from 'lucide-react';
 import { Link, useLocation } from 'react-router';
 
 import useAuthUser from '@/hooks/useAuthUser';
@@ -38,6 +38,16 @@ const Sidebar = (): React.JSX.Element => {
         >
           <UsersIcon className="size-5 text-base-content opacity-70" />
           <span>Friends</span>
+        </Link>
+
+        <Link
+          to="/recent-chats"
+          className={`btn btn-ghost justify-start w-full gap-3 px-3 normal-case ${
+            currentPath === '/recent-chats' ? 'btn-active' : ''
+          }`}
+        >
+          <MessageCircle className="size-5 text-base-content opacity-70" />
+          <span>Recent Chats</span>
         </Link>
 
         <Link
