@@ -31,6 +31,7 @@ app.use(
       'http://localhost:3000',
       'http://ameystack.in',
       'https://ameystack.in',
+      'https://streamifyit.netlify.app',
     ],
     credentials: true,
   })
