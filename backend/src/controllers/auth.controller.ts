@@ -71,10 +71,11 @@ const authController = {
     const { token } = signJwtToken({ userId: newUser._id });
 
     res.cookie('jwt', token, {
-      maxAge: 7 * 24 * 60 * 60 * 1000,
-      httpOnly: true,
-      sameSite: 'strict',
-      secure: Env.NODE_ENV === 'production',
+      maxAge: 7 * 24 * 60 * 60 * 1000, //Sets the cookie to expire after 7 days.
+      httpOnly: true, // prevent XSS attacks,
+      sameSite: 'none', // This is also crucial for cross-origin cookies
+      secure: Env.NODE_ENV === 'production', //This attribute ensures the cookie is only sent over HTTPS.
+      path: '/',
     });
 
     return sendApiResponse(
@@ -107,8 +108,9 @@ const authController = {
     res.cookie('jwt', token, {
       maxAge: 7 * 24 * 60 * 60 * 1000, //Sets the cookie to expire after 7 days.
       httpOnly: true, // prevent XSS attacks,
-      sameSite: 'strict', // prevent CSRF attacks
-      secure: Env.NODE_ENV === 'production',
+      sameSite: 'none', // This is also crucial for cross-origin cookies
+      secure: Env.NODE_ENV === 'production', //This attribute ensures the cookie is only sent over HTTPS.
+      path: '/',
     });
 
     // This attaches the token to the browser as a cookie named jwt.

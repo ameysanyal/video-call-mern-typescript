@@ -11,6 +11,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    outputs:
+      image_tag: ${{ steps.vars.outputs.sha }}
     steps:
       - name: Checkout Source
         uses: actions/checkout@v4
@@ -28,21 +30,28 @@ jobs:
         working-directory: ./backend
         run: npm run test
 
+      - name: Get short Git SHA
+        id: vars
+        run: echo "sha=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+
       - name: Login to Docker Hub
         run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build Docker Image (Backend)
-        run: docker build --no-cache -t ameysanyal/video-call-backend ./backend
+        run: docker build --no-cache -t ameysanyal/video-call-backend:${{ steps.vars.outputs.sha }} ./backend
 
       - name: Push Docker Image to Docker Hub
-        run: docker push ameysanyal/video-call-backend:latest
+        run: docker push ameysanyal/video-call-backend:${{ steps.vars.outputs.sha }}
 
   deploy:
     needs: build
     runs-on: [self-hosted, backend]
     steps:
+      - name: Set image tag
+        run: echo "IMAGE_TAG=${{ needs.build.outputs.image_tag }}" >> $GITHUB_ENV
+
       - name: Pull image from Docker Hub
-        run: docker pull ameysanyal/video-call-backend:latest
+        run: docker pull ameysanyal/video-call-backend:$IMAGE_TAG
 
       - name: Delete old container
         run: docker rm -f backend-container || true
@@ -58,4 +67,7 @@ jobs:
             -e JWT_SECRET_KEY='${{ secrets.JWT_SECRET_KEY }}' \
             -e JWT_EXPIRES_IN='${{ secrets.JWT_EXPIRES_IN }}' \
             -e NODE_ENV='${{ secrets.NODE_ENV }}' \
-            ameysanyal/video-call-backend:latest
+            ameysanyal/video-call-backend:$IMAGE_TAG
+
+      - name: Remove unused Docker images
+        run: docker image prune -af --filter "until=24h"
