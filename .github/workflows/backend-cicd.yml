@@ -38,6 +38,7 @@ jobs:
         run: |
           docker run -d -p 5001:5001 \
             --name backend-container \
+            -e PORT='${{ secrets.PORT }}' \
             -e MONGO_URI='${{ secrets.MONGO_URI }}' \
             -e STREAM_API_KEY='${{ secrets.STREAM_API_KEY }}' \
             -e STREAM_API_SECRET='${{ secrets.STREAM_API_SECRET }}' \

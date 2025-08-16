@@ -41,7 +41,6 @@ app.use(cookieParser());
 // Add Morgan middleware before your routes
 app.use(morganMiddleware);
 
-// Define routes
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/chat', chatRoutes);

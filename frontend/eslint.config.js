@@ -35,7 +35,7 @@ export default tseslint.config(
       sonarjs: sonarjs,
       promise: promise,
       node: node,
-      unicorn: unicorn,
+      // unicorn: unicorn,
       perfectionist: perfectionist,
     },
     rules: {
@@ -100,7 +100,7 @@ export default tseslint.config(
       'perfectionist/sort-imports': 'off',
 
       // 📁 Enforce consistent file naming
-      'unicorn/filename-case': 'off',
+      // 'unicorn/filename-case': 'off',
     },
   }
 );

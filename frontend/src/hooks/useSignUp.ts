@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient, type UseMutationResult } from '@tanstack/react-query';
 
 // Import the 'signup' function and its associated types
-import { signup, type UserSignupData, type AuthResponse } from '@/lib/api'; // Adjust path if necessary
+import { signup, type UserSignupData, type AuthResponse } from '@/lib/api';
 import { AxiosError } from '@/lib/axios';
 
 // 1. Define the return type of your custom hook
