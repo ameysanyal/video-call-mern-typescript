@@ -36,7 +36,7 @@ const logFormat = winston.format.combine(
 
 // Configure the Winston logger instance
 const winstonLogger = winston.createLogger({
-  level: Env.NODE_ENV === 'development' ? 'debug' : 'info', // More verbose in dev, less in prod
+  level: Env.NODE_ENV === 'development' ? 'debug' : 'http', // More verbose in dev, less in prod
   levels, // Use custom levels
   format: logFormat,
   transports: [

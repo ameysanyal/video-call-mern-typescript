@@ -1,4 +1,4 @@
-import { BellIcon, HomeIcon, MessageCircle, ShipWheelIcon, UsersIcon } from 'lucide-react';
+import { BellIcon, HomeIcon, MessageCircle, ShipWheelIcon } from 'lucide-react';
 import { Link, useLocation } from 'react-router';
 
 import useAuthUser from '@/hooks/useAuthUser';
@@ -28,16 +28,6 @@ const Sidebar = (): React.JSX.Element => {
         >
           <HomeIcon className="size-5 text-base-content opacity-70" />
           <span>Home</span>
-        </Link>
-
-        <Link
-          to="/friends"
-          className={`btn btn-ghost justify-start w-full gap-3 px-3 normal-case ${
-            currentPath === '/friends' ? 'btn-active' : ''
-          }`}
-        >
-          <UsersIcon className="size-5 text-base-content opacity-70" />
-          <span>Friends</span>
         </Link>
 
         <Link
