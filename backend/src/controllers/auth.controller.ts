@@ -124,7 +124,6 @@ const authController = {
         success: true,
         data: user,
         statusCode: HTTPSTATUS.OK,
-        meta: token,
       })
     );
   }),

@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { validate } from '../../../src/middlewares/validateSchema.middleware.js'; // adjust path
+import { validate } from '../../../src/middlewares/validateSchema.middleware.js';
 import { z } from 'zod';
 
 describe('validate middleware', () => {
@@ -26,6 +26,7 @@ describe('validate middleware', () => {
 
     const middleware = validate({ body: bodySchema });
 
+    //Executes the middleware. as any bypasses TS type checks since these aren’t real Express objects.
     middleware(req as any, res as any, next);
 
     expect(req.body).toEqual({ name: 'Alice', age: 30 });
@@ -49,6 +50,8 @@ describe('validate middleware', () => {
 
     expect(next).toHaveBeenCalled();
     const calledWithError = next.mock.calls[0][0];
+    // Ensures next was called with an error.
+    // Pulls the first argument from the first call to next and checks it’s a ZodError.
     expect(calledWithError).toBeInstanceOf(Error);
     expect(calledWithError.name).toBe('ZodError');
   });

@@ -11,6 +11,13 @@ describe('errorHandler middleware', () => {
   let mockRes: Partial<Response>;
   let mockNext: NextFunction;
 
+  //mockReq: fake request object with a path property.
+  //mockRes: fake response object.
+  //status: mocked (vi.fn()) and made chainable by returning this.
+  //json: mocked to capture response.
+  //mockNext: mocked next function (not really used here, but required by Express).
+  //beforeEach: resets mocks before each test → ensures tests don’t leak state.
+
   beforeEach(() => {
     mockReq = {
       path: '/test/path',
@@ -24,6 +31,7 @@ describe('errorHandler middleware', () => {
     vi.clearAllMocks();
   });
 
+  //Test Case 1: ZodError
   it('should handle ZodError and return 400 with formatted errors', () => {
     // Create a sample ZodIssue array to simulate a ZodError
     const issues = [
@@ -61,6 +69,7 @@ describe('errorHandler middleware', () => {
     });
   });
 
+  //Test Case 2: AppError
   it('should handle AppError and return custom status and message', () => {
     const appError = new AppError('Custom error message', HTTPSTATUS.FORBIDDEN, 'CUSTOM_ERROR');
 
@@ -73,6 +82,7 @@ describe('errorHandler middleware', () => {
     });
   });
 
+  //Test Case 3: Generic Error
   it('should handle generic error and return 500 with message', () => {
     const genericError = new Error('Something went wrong');
 
@@ -85,6 +95,7 @@ describe('errorHandler middleware', () => {
     });
   });
 
+  //Test Case 4: Logging
   it('should log error and path', () => {
     const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
     const error = new Error('Test error');
@@ -101,3 +112,7 @@ describe('errorHandler middleware', () => {
     consoleSpy.mockRestore();
   });
 });
+
+//Uses vi.spyOn to spy on console.log.
+//Verifies that the error handler logs the path and error.
+//mockRestore() cleans up after test.

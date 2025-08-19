@@ -7,12 +7,16 @@ import { protectRoute } from '../../../src/middlewares/auth.middleware.js';
 
 vi.mock('jsonwebtoken');
 vi.mock('../../../src/models/user.model.js');
+// Mocks the jsonwebtoken and User modules. This is crucial for unit testing, as it replaces the real module with a mock,
+// preventing the test from making real database or external API calls.
 
 describe('protectRoute middleware', () => {
   let mockReq: Partial<Request>;
   let mockRes: Partial<Response>;
   let next: NextFunction;
 
+  //This hook runs before each it test block.
+  // It resets the mocks to a clean state to ensure tests are isolated and don't affect each other.
   beforeEach(() => {
     mockReq = {
       cookies: {},
@@ -25,6 +29,8 @@ describe('protectRoute middleware', () => {
     } as Partial<Response>;
 
     next = vi.fn();
+
+    //Resets the call history of all mock functions.
     vi.clearAllMocks();
   });
 
@@ -41,6 +47,7 @@ describe('protectRoute middleware', () => {
   it('should return 401 if token is valid but no userId in payload', async () => {
     mockReq.cookies = { jwt: 'valid.token' };
 
+    // Mocks the jwt.verify function to return an empty object, simulating a token without a user ID.
     vi.mocked(jwt.verify).mockReturnValue({} as any);
 
     await protectRoute(mockReq as Request, mockRes as Response, next);
@@ -94,6 +101,8 @@ describe('protectRoute middleware', () => {
 
     vi.mocked(jwt.verify).mockReturnValue({ userId: validId } as any);
     vi.spyOn(mongoose, 'isValidObjectId').mockReturnValue(true);
+
+    //Mocks the database call
     vi.mocked(User.findById).mockReturnValue({
       select: vi.fn().mockResolvedValue(fakeUser),
     } as any);

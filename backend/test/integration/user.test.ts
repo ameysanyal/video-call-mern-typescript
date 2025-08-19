@@ -6,6 +6,7 @@ import User from '../../src/models/user.model.js';
 describe('User API Integration Tests', () => {
   const baseEndpoint = '/api/users';
 
+  //Defines mock user data used for signup.
   const user1 = {
     email: 'user1@streamify.com',
     fullName: 'User One',
@@ -18,11 +19,14 @@ describe('User API Integration Tests', () => {
     password: 'Password123',
   };
 
+  //Declares variables to store the JWT cookies and user IDs,
+  //which are needed for authenticated requests in the tests.
   let jwtCookieUser1: string;
   let jwtCookieUser2: string;
   let user1Id: string;
   let user2Id: string;
 
+  //This hook runs before every single test (it block)
   beforeEach(async () => {
     await User.deleteMany({});
     // Signup user1 and user2 and store cookies and ids
