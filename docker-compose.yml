@@ -1,0 +1,30 @@
+# This file defines services (containers) and the network they share.
+
+services:
+  backend:
+    build:
+      context: ./backend # Path to your backend's Dockerfile
+    container_name: backend-container
+    ports:
+      - "5001:5001" # Map host port 5001 to container port 5001
+    env_file:
+      - ./backend/.env
+    networks:
+      - streamify-network
+
+  frontend:
+    build:
+      context: ./frontend # Path to your frontend's Dockerfile
+    container_name: frontend-container
+    ports:
+      - "80:80" # Map host port 80 to container port 80
+    env_file:
+      - ./frontend/.env
+    depends_on:
+      - backend
+    networks:
+      - streamify-network
+
+networks:
+  streamify-network:
+    driver: bridge

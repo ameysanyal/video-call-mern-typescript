@@ -29,6 +29,12 @@ export const validate = (schemas: Schemas) => (req: Request, res: Response, next
   }
 };
 
+//the parse method in your validate middleware is coming from Zod.
+//parse(data):
+//Tries to validate data against the schema.
+//If valid → returns the parsed (and possibly transformed) value.
+//If invalid → throws a ZodError.
+
 // req.params = parsedParams as import("express-serve-static-core").ParamsDictionary;
 // req.query = parsedQuery as import("qs").ParsedQs;
 // These type assertions are necessary because req.params and req.query have broader types in Express (ParamsDictionary and ParsedQs respectively) that can't be directly inferred from the parsedParams and parsedQuery which are typed according to your Zod schema.

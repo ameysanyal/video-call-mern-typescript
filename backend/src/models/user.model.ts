@@ -72,6 +72,9 @@ const userSchema = new mongoose.Schema<UserDocument>(
   { timestamps: true }
 );
 
+//In a Mongoose middleware function (not an arrow function),
+// this refers to the current document instance that is being saved.
+
 //Pre-save Middleware for Password Hashing
 userSchema.pre('save', async function (next) {
   if (!this.isModified('password')) return next();

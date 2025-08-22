@@ -5,11 +5,19 @@ import { HTTPSTATUS } from '@/config/http.config.js';
 import { AppError } from '@/utils/app-error.js';
 import { ErrorCodeEnum } from '@/enums/error-code.enum.js';
 
+//A ZodError contains an array of issues, each with:
+//path → which field failed validation
+// message → why it failed
+
+//helper to transform Zod’s ugly error object into a neat JSON response for the client.
 const formatZodError = (res: Response, error: z.ZodError) => {
+  // Map ZodError issues to an array of formatted errors
   const errors = error?.issues?.map((err) => ({
     field: err.path.join('.'),
     message: err.message,
   }));
+
+  //Formats it into a clean JSON response.
   return res.status(HTTPSTATUS.BAD_REQUEST).json({
     message: 'Validation failed',
     errors: errors,

@@ -7,14 +7,11 @@ node_modules
 dist
 build
 npm-debug.log\*
-coverage
 
 # Ignore Git files and local environment files
 
 .git
 .gitignore
-.env
-.env.\*
 
 # Ignore editor and IDE files
 
@@ -33,5 +30,6 @@ coverage
 
 # Ignore test and documentation files (optional)
 
-test
-\*.md
+# tests
+
+# \*.md

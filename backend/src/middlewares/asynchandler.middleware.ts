@@ -11,3 +11,6 @@ export const asyncHandler =
       next(error);
     }
   };
+
+//In an async function, even without a return statement,
+//the function implicitly returns a Promise<void> (i.e., a resolved promise with undefined).”
