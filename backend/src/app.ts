@@ -1,4 +1,4 @@
-import express, { Request, Response } from 'express';
+import express, { NextFunction, Request, Response } from 'express';
 import 'dotenv/config';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
@@ -9,7 +9,8 @@ import authRoutes from '@/routes/auth.route.js';
 import userRoutes from '@/routes/user.route.js';
 import chatRoutes from '@/routes/chat.route.js';
 import { morganMiddleware } from '@/config/morgan.config.js';
-import mongoSanitize from 'express-mongo-sanitize';
+import sanitize from 'mongo-sanitize';
+import rateLimit from 'express-rate-limit';
 
 // Create the Express app instance
 const app = express();
@@ -36,10 +37,32 @@ app.use(
   })
 );
 
-// Place the sanitization middleware in your Express application before any route handlers that process user input.
-app.use(mongoSanitize());
+// Limit repeated requests to APIs (basic DoS protection)
+app.use(
+  rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 100, // max requests per IP
+  })
+);
 
 app.use(express.json());
+
+// Place the sanitization middleware in your Express application before any route handlers that process user input.
+// Custom sanitize middleware
+
+app.use((req: Request, res: Response, next: NextFunction) => {
+  if (req.body) req.body = sanitize(req.body);
+  if (req.params) req.params = sanitize(req.params);
+
+  if (req.query) {
+    for (const key in req.query) {
+      req.query[key] = sanitize(req.query[key]);
+    }
+  }
+
+  next();
+});
+
 app.use(cookieParser());
 
 // Add Morgan middleware before your routes
@@ -53,6 +76,11 @@ app.use('/api-docs', swaggerRoute);
 // Simple root route
 app.get('/', (req: Request, res: Response) => {
   res.send(`hello checking backend`);
+});
+
+// 404 Handler
+app.use((req: Request, res: Response) => {
+  res.status(404).json({ error: 'Not Found' });
 });
 
 // Global error handler middleware
