@@ -29,6 +29,10 @@ export const swaggerOptions: Options = {
     ],
     servers: [
       {
+        url: process.env.PUBLIC_API_URL,
+        description: 'Production server',
+      },
+      {
         url: `http://localhost:${Env.PORT}`,
         description: 'Development server',
       },

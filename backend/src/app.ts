@@ -9,6 +9,7 @@ import authRoutes from '@/routes/auth.route.js';
 import userRoutes from '@/routes/user.route.js';
 import chatRoutes from '@/routes/chat.route.js';
 import { morganMiddleware } from '@/config/morgan.config.js';
+import mongoSanitize from 'express-mongo-sanitize';
 
 // Create the Express app instance
 const app = express();
@@ -34,6 +35,10 @@ app.use(
     credentials: true,
   })
 );
+
+// Place the sanitization middleware in your Express application before any route handlers that process user input.
+app.use(mongoSanitize());
+
 app.use(express.json());
 app.use(cookieParser());
 
